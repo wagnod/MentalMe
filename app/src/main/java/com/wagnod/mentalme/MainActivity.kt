@@ -19,9 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.wagnod.mentalme.navigation.Navigator
-import com.wagnod.mentalme.ui.data.NavSections
-import com.wagnod.mentalme.ui.friends.Friend
+import com.wagnod.core_ui.Navigator
+import com.wagnod.navigation.data.NavSections
 import com.wagnod.mentalme.ui.theme.MentalMeTheme
 import org.koin.android.ext.android.inject
 
@@ -88,9 +87,3 @@ fun ScaffoldMentalMe(navigator: Navigator) {
         }
     }
 }
-
-
-val sampleData = listOf(
-    Friend("Varvara", "Symonovych", "Fill Depressed"),
-    Friend("Varvara", "Symonovych", "Fill Depressed")
-)

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MentalMe</string>
+    <string name="nav_home">home</string>
+    <string name="nav_search">search</string>
+    <string name="nav_add">add</string>
+    <string name="nav_friends">friends</string>
+    <string name="nav_profile">profile</string>
+</resources>
