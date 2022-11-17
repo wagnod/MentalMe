@@ -8,11 +8,10 @@ import com.wagnod.home.HomeScreen
 import com.wagnod.home.diary.Diary
 import com.wagnod.home.goals.Goals
 import com.wagnod.home.tracker.MoodTracker
-import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.home.HomeNavigator
 import com.wagnod.navigation.data.NavSections
 
-class HomeNavigatorImp : HomeNavigator {
+class HomeNavigatorImpl : HomeNavigator {
 
     private lateinit var mNavController: NavController
 

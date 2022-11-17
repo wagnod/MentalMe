@@ -3,36 +3,34 @@ package com.wagnod.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.friends.FriendsNavigator
 import com.wagnod.core_ui.home.HomeNavigator
 import com.wagnod.core_ui.new_screen.NewNavigator
 import com.wagnod.core_ui.profile.ProfileNavigator
 import com.wagnod.core_ui.search.SearchNavigator
 import com.wagnod.navigation.data.NavSections
-import com.wagnod.navigation.friends.FriendsNavigatorImpl
-import com.wagnod.navigation.home.HomeNavigatorImp
-import com.wagnod.navigation.home.HomeNavigatorImp.Companion.rootRoute
-import com.wagnod.navigation.new.NewNavigatorImpl
-import com.wagnod.navigation.profile.ProfileNavigatorImpl
-import com.wagnod.navigation.search.SearchNavigatorImpl
+import com.wagnod.navigation.home.HomeNavigatorImpl.Companion.rootRoute
 
 class NavigatorImpl(
-    override val homeNavigator: HomeNavigator = HomeNavigatorImp(),
-    override val searchNavigator: SearchNavigator = SearchNavigatorImpl(),
-    override val newNavigator: NewNavigator = NewNavigatorImpl(),
-    override val friendsNavigator: FriendsNavigator = FriendsNavigatorImpl(),
-    override val profileNavigator: ProfileNavigator = ProfileNavigatorImpl()
-) : com.wagnod.core_ui.Navigator {
+    override val homeNavigator: HomeNavigator,
+    override val searchNavigator: SearchNavigator,
+    override val newNavigator: NewNavigator,
+    override val friendsNavigator: FriendsNavigator,
+    override val profileNavigator: ProfileNavigator
+) : Navigator {
 
     private lateinit var mNavController: NavHostController
 
+    private val navigators = listOf(
+        homeNavigator, searchNavigator, newNavigator, friendsNavigator, profileNavigator
+    )
+
     override fun setNavController(navController: NavHostController) {
         mNavController = navController
-        homeNavigator.setNavController(navController)
-        searchNavigator.setNavController(navController)
-        newNavigator.setNavController(navController)
-        friendsNavigator.setNavController(navController)
-        profileNavigator.setNavController(navController)
+        navigators.forEach {
+            it.setNavController(navController)
+        }
     }
 
     @Composable
@@ -41,11 +39,9 @@ class NavigatorImpl(
             navController = mNavController,
             startDestination = rootRoute
         ) {
-            homeNavigator.setGraph(this, this@NavigatorImpl)
-            searchNavigator.setGraph(this, this@NavigatorImpl)
-            newNavigator.setGraph(this, this@NavigatorImpl)
-            friendsNavigator.setGraph(this, this@NavigatorImpl)
-            profileNavigator.setGraph(this, this@NavigatorImpl)
+            navigators.forEach {
+                it.setGraph(this, this@NavigatorImpl)
+            }
         }
     }
 
