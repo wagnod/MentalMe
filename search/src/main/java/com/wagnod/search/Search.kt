@@ -21,7 +21,7 @@ fun Search() {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(colorResource(id = R.color.base_blue))
-                .height(50.dp),
+                .height(56.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
 
@@ -31,7 +31,7 @@ fun Search() {
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Medium
                 )
             )
         }

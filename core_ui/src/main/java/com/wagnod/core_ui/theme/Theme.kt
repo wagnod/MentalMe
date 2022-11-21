@@ -1,4 +1,4 @@
-package com.wagnod.mentalme.ui.theme
+package com.wagnod.core_ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -7,14 +7,14 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
+    primary = BaseBlue,
+    primaryVariant = BaseBlue,
     secondary = Teal200
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
+    primary = BaseBlue,
+    primaryVariant = BaseBlue,
     secondary = Teal200
 
     /* Other default colors to override

@@ -9,6 +9,7 @@ import com.wagnod.home.diary.Diary
 import com.wagnod.home.goals.Goals
 import com.wagnod.home.tracker.MoodTracker
 import com.wagnod.core_ui.home.HomeNavigator
+import com.wagnod.home.goals.GoalCreator
 import com.wagnod.navigation.data.NavSections
 
 class HomeNavigatorImpl : HomeNavigator {
@@ -24,7 +25,8 @@ class HomeNavigatorImpl : HomeNavigator {
             composable(NavSections.HOME.route) { HomeScreen(navigator) }
             composable(HomeNavRoutes.TRACKER.route) { MoodTracker() }
             composable(HomeNavRoutes.DIARY.route) { Diary() }
-            composable(HomeNavRoutes.GOALS.route) { Goals() }
+            composable(HomeNavRoutes.GOALS.route) { Goals(navigator) }
+            composable(HomeNavRoutes.CREATE_GOAL.route) { GoalCreator(navigator) }
         }
     }
 
@@ -39,6 +41,11 @@ class HomeNavigatorImpl : HomeNavigator {
     override fun navigateToTracker() {
         mNavController.navigate(HomeNavRoutes.TRACKER.route)
     }
+
+    override fun navigateToGoalCreator() {
+        mNavController.navigate(HomeNavRoutes.CREATE_GOAL.route)
+    }
+
 
 
     companion object {

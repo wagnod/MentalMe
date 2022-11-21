@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.wagnod.core_ui.Navigator
 import com.wagnod.navigation.data.NavSections
-import com.wagnod.mentalme.ui.theme.MentalMeTheme
+import com.wagnod.core_ui.theme.MentalMeTheme
 import org.koin.android.ext.android.inject
 
 class MainActivity() : ComponentActivity() {

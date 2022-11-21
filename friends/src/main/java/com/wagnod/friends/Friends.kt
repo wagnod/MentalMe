@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.wagnod.core_ui.theme.MentalMeTheme
 
 @Composable
 fun Friends(
@@ -30,8 +32,8 @@ fun Friends(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(colorResource(id = R.color.base_blue))
-                .height(50.dp),
+                .background(MaterialTheme.colors.primary)
+                .height(56.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
 
@@ -41,7 +43,7 @@ fun Friends(
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Medium
                 )
             )
         }
@@ -125,7 +127,9 @@ fun PreviewFriends() {
         Friend("Varvara", "Symonovych", "Fill Depressed"),
         Friend("Varvara", "Symonovych", "Fill Depressed")
     )
-    Friends(sampleData)
+    MentalMeTheme {
+        Friends(sampleData)
+    }
 }
 
 

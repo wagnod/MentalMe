@@ -1,4 +1,4 @@
-package com.wagnod.mentalme.ui.theme
+package com.wagnod.core_ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
