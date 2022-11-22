@@ -9,7 +9,7 @@ enum class NavSections(
     val icon: Int,
     val route: String,
     val value: Int,
-    val tabNavigationCallback: (com.wagnod.core_ui.Navigator) -> Unit
+    val tabNavigationCallback: (Navigator) -> Unit
 ) {
     HOME(
         title = R.string.nav_home,

@@ -17,7 +17,7 @@ class SearchNavigatorImpl : SearchNavigator {
         mNavController = navController
     }
 
-    override fun setGraph(navGraphBuilder: NavGraphBuilder, navigator: com.wagnod.core_ui.Navigator) {
+    override fun setGraph(navGraphBuilder: NavGraphBuilder, navigator: Navigator) {
         navGraphBuilder.navigation(NavSections.SEARCH.route, rootRoute) {
             composable(NavSections.SEARCH.route) { Search() }
         }

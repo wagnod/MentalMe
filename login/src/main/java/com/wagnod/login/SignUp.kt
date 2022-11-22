@@ -27,14 +27,14 @@ import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
 
 @Composable
-fun LoginPage(
+fun SignUpPage(
     navigator: Navigator? = null
 ) = ConstraintLayout(
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier.fillMaxSize()
 ) {
-    val (card, text) = createRefs()
+    val (inputs, login) = createRefs()
     Column(
-        modifier = Modifier.constrainAs(card) {
+        modifier = Modifier.constrainAs(inputs) {
             top.linkTo(parent.top)
             start.linkTo(parent.start)
             end.linkTo(parent.end)
@@ -44,31 +44,53 @@ fun LoginPage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Title()
+        NameInputView()
         EmailInputView()
         PasswordInputView()
-        LoginButton(navigator)
-        ForgotPasswordText()
+        ConfirmPasswordInputView()
+        SignUpButton()
     }
-    val textModifier = Modifier.constrainAs(text) {
+    val textModifier = Modifier.constrainAs(login) {
         bottom.linkTo(parent.bottom)
         start.linkTo(parent.start)
         end.linkTo(parent.end)
     }
-    SignUpText(textModifier, navigator)
+    LoginText(modifier = textModifier, navigator = navigator)
 }
 
 @Composable
 private fun Title() {
     Text(
         modifier = Modifier.padding(vertical = 10.dp),
-        text = "Sign in",
+        text = "Sign Up",
         style = TextStyle(fontSize = 30.sp)
     )
 }
 
 @Composable
-private fun EmailInputView() {
+private fun NameInputView() {
     val username = remember { mutableStateOf(TextFieldValue()) }
+    TextField(
+        modifier = Modifier.padding(vertical = 10.dp),
+        label = { Text(text = "Name") },
+        leadingIcon = {
+            Icon(
+                painterResource(id = R.drawable.ic_person),
+                modifier = Modifier.size(24.dp),
+                contentDescription = ""
+            )
+        },
+        value = username.value,
+        onValueChange = { username.value = it },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
+        )
+    )
+}
+
+@Composable
+private fun EmailInputView() {
+    val email = remember { mutableStateOf(TextFieldValue()) }
     TextField(
         modifier = Modifier.padding(vertical = 10.dp),
         label = { Text(text = "Email") },
@@ -78,8 +100,8 @@ private fun EmailInputView() {
                 contentDescription = ""
             )
         },
-        value = username.value,
-        onValueChange = { username.value = it },
+        value = email.value,
+        onValueChange = { email.value = it },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
         )
@@ -110,7 +132,30 @@ private fun PasswordInputView() {
 }
 
 @Composable
-private fun LoginButton(navigator: Navigator?) {
+private fun ConfirmPasswordInputView() {
+    val password = remember { mutableStateOf(TextFieldValue()) }
+    TextField(
+        modifier = Modifier.padding(vertical = 10.dp),
+        label = { Text(text = "Confirm Password") },
+        leadingIcon = {
+            Icon(
+                painterResource(id = R.drawable.ic_password),
+                modifier = Modifier.size(24.dp),
+                contentDescription = ""
+            )
+        },
+        value = password.value,
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        onValueChange = { password.value = it },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
+        )
+    )
+}
+
+@Composable
+private fun SignUpButton() {
     Button(
         onClick = { },
         shape = RoundedCornerShape(50.dp),
@@ -123,24 +168,12 @@ private fun LoginButton(navigator: Navigator?) {
         )
     )
     {
-        Text(text = "Login")
+        Text(text = "Sign Up")
     }
 }
 
 @Composable
-private fun ForgotPasswordText() {
-    ClickableText(
-        text = AnnotatedString("Forgot password?"),
-        modifier = Modifier.padding(vertical = 10.dp),
-        onClick = { },
-        style = TextStyle(
-            fontSize = 14.sp
-        )
-    )
-}
-
-@Composable
-private fun SignUpText(
+private fun LoginText(
     modifier: Modifier,
     navigator: Navigator?
 ) {
@@ -149,12 +182,12 @@ private fun SignUpText(
             .padding(bottom = 32.dp)
     ) {
         Text(
-            text = "Don't have an account? ",
+            text = "Already have an account? ",
             style = TextStyle(fontSize = 14.sp)
         )
         ClickableText(
-            text = AnnotatedString("Sign up here"),
-            onClick = { navigator?.loginNavigator?.navigateToSignUp() },
+            text = AnnotatedString("Sign in here"),
+            onClick = { navigator?.navigateToLogin() },
             style = TextStyle(
                 fontSize = 14.sp,
                 color = MaterialTheme.colors.primary,
@@ -166,8 +199,8 @@ private fun SignUpText(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewLogin() {
-    MentalMeTheme {
-        LoginPage()
+fun PreviewSignUpPage() {
+    MentalMeTheme() {
+        SignUpPage()
     }
 }

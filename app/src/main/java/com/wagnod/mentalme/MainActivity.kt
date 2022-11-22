@@ -14,14 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.wagnod.core_ui.Navigator
-import com.wagnod.navigation.data.NavSections
 import com.wagnod.core_ui.theme.MentalMeTheme
+import com.wagnod.navigation.data.NavSections
 import org.koin.android.ext.android.inject
 
 class MainActivity() : ComponentActivity() {
@@ -47,9 +46,10 @@ class MainActivity() : ComponentActivity() {
 fun BottomBar(navigator: Navigator) {
 
     val selectedIndex = remember { mutableStateOf(0) }
-    BottomNavigation(backgroundColor = colorResource(id = R.color.base_blue)) {
-        val sections = NavSections.values()
-        sections.forEach {
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colors.primary
+    ) {
+        NavSections.values().forEach {
             BottomNavigationItem(
                 icon = {
                     Icon(
@@ -75,7 +75,11 @@ fun ScaffoldMentalMe(navigator: Navigator) {
     navigator.setNavController(navController)
 
     Scaffold(
-        bottomBar = { BottomBar(navigator) }
+        bottomBar = {
+            if (navigator.checkDestination()) {
+                BottomBar(navigator)
+            }
+        }
     ) {
         Box(
             modifier = Modifier
