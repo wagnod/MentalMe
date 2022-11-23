@@ -37,6 +37,10 @@ class NavigatorImpl(
         }
     }
 
+    override fun back() {
+        mNavController.navigateUp()
+    }
+
     @Composable
     override fun buildNavHost() {
         NavHost(

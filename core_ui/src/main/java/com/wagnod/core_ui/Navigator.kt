@@ -22,6 +22,8 @@ interface Navigator {
     fun buildNavHost()
     fun setNavController(navController: NavHostController)
 
+    fun back()
+
     fun navigateToHome()
     fun navigateToSearch()
     fun navigateToNew()

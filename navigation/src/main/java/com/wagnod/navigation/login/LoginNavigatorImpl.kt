@@ -6,8 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.login.LoginNavigator
-import com.wagnod.login.ui.sign_in.LoginPage
-import com.wagnod.login.ui.sign_up.SignUpPage
+import com.wagnod.login.ui.auth.AuthScreen
 import com.wagnod.navigation.data.LoginRoute
 
 class LoginNavigatorImpl : LoginNavigator {
@@ -19,8 +18,7 @@ class LoginNavigatorImpl : LoginNavigator {
 
     override fun setGraph(navGraphBuilder: NavGraphBuilder, navigator: Navigator) {
         navGraphBuilder.navigation(LoginRoute.route, rootRoute) {
-            composable(LoginRoute.route) { LoginPage(navigator) }
-            composable(LoginRoute.singUpRoute) { SignUpPage(navigator) }
+            composable(LoginRoute.route) { AuthScreen(navigator) }
         }
     }
 
