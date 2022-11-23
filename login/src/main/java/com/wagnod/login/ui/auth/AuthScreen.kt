@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -135,8 +136,12 @@ private fun InputView(
             Text(text = data.label)
         },
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
         ),
+        shape = RoundedCornerShape(8.dp),
         leadingIcon = {
             Icon(
                 painterResource(id = data.icon),
