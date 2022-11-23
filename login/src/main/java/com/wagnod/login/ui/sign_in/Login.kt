@@ -1,4 +1,4 @@
-package com.wagnod.login
+package com.wagnod.login.ui.sign_in
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,8 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -17,7 +15,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,10 +22,34 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
+import com.wagnod.login.R
+import com.wagnod.login.ui.AuthContract.*
+import com.wagnod.login.ui.AuthViewModel
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LoginPage(
-    navigator: Navigator? = null
+    navigator: Navigator? = null,
+    viewModel: AuthViewModel = getViewModel()
+) {
+    val listener = object : Listener {
+        override fun toSignUp() {
+            navigator?.loginNavigator?.navigateToSignUp()
+        }
+        override fun onDataChanged(type: TextFieldType, text: String) {
+            viewModel.setEvent(Event.OnDataChanged(type, text))
+        }
+    }
+
+    val state = viewModel.viewState.value
+
+    LoginScreenContent(state, listener)
+}
+
+@Composable
+fun LoginScreenContent(
+    state: State,
+    listener: Listener? = null
 ) = ConstraintLayout(
     modifier = Modifier.fillMaxSize(),
 ) {
@@ -44,9 +65,9 @@ fun LoginPage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Title()
-        EmailInputView()
-        PasswordInputView()
-        LoginButton(navigator)
+        EmailInputView(state, listener)
+        PasswordInputView(state, listener)
+        LoginButton(listener)
         ForgotPasswordText()
     }
     val textModifier = Modifier.constrainAs(text) {
@@ -54,7 +75,7 @@ fun LoginPage(
         start.linkTo(parent.start)
         end.linkTo(parent.end)
     }
-    SignUpText(textModifier, navigator)
+    SignUpText(textModifier, listener)
 }
 
 @Composable
@@ -67,31 +88,44 @@ private fun Title() {
 }
 
 @Composable
-private fun EmailInputView() {
-    val username = remember { mutableStateOf(TextFieldValue()) }
+private fun EmailInputView(
+    state: State,
+    listener: Listener?
+) {
     TextField(
         modifier = Modifier.padding(vertical = 10.dp),
-        label = { Text(text = "Email") },
+        value = state.email,
+        onValueChange = {
+            listener?.onDataChanged(TextFieldType.EMAIL, it)
+        },
+        label = {
+            Text(text = "Email")
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
+        ),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Email,
                 contentDescription = ""
             )
-        },
-        value = username.value,
-        onValueChange = { username.value = it },
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
-        )
+        }
     )
 }
 
 @Composable
-private fun PasswordInputView() {
-    val password = remember { mutableStateOf(TextFieldValue()) }
+private fun PasswordInputView(
+    state: State,
+    listener: Listener?
+) {
     TextField(
         modifier = Modifier.padding(vertical = 10.dp),
-        label = { Text(text = "Password") },
+        value = state.password,
+        onValueChange = {
+            listener?.onDataChanged(TextFieldType.PASSWORD, it)
+        },
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         leadingIcon = {
             Icon(
                 painterResource(id = R.drawable.ic_password),
@@ -99,20 +133,23 @@ private fun PasswordInputView() {
                 contentDescription = ""
             )
         },
-        value = password.value,
-        visualTransformation = PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        onValueChange = { password.value = it },
+        label = {
+            Text(text = "Password")
+        },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f)
-        )
+        ),
     )
 }
 
 @Composable
-private fun LoginButton(navigator: Navigator?) {
+private fun LoginButton(
+    listener: Listener?
+) {
     Button(
-        onClick = { },
+        onClick = {
+
+        },
         shape = RoundedCornerShape(50.dp),
         modifier = Modifier
             .padding(horizontal = 50.dp, vertical = 10.dp)
@@ -125,6 +162,7 @@ private fun LoginButton(navigator: Navigator?) {
     {
         Text(text = "Login")
     }
+
 }
 
 @Composable
@@ -142,7 +180,7 @@ private fun ForgotPasswordText() {
 @Composable
 private fun SignUpText(
     modifier: Modifier,
-    navigator: Navigator?
+    listener: Listener?
 ) {
     Row(
         modifier = modifier
@@ -154,7 +192,9 @@ private fun SignUpText(
         )
         ClickableText(
             text = AnnotatedString("Sign up here"),
-            onClick = { navigator?.loginNavigator?.navigateToSignUp() },
+            onClick = {
+                listener?.toSignUp()
+            },
             style = TextStyle(
                 fontSize = 14.sp,
                 color = MaterialTheme.colors.primary,

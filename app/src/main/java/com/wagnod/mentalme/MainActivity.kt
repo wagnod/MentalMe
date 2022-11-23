@@ -23,7 +23,7 @@ import com.wagnod.core_ui.theme.MentalMeTheme
 import com.wagnod.navigation.data.NavSections
 import org.koin.android.ext.android.inject
 
-class MainActivity() : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
     private val navigator by inject<Navigator>()
 
