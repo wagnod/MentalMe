@@ -11,6 +11,7 @@ interface AuthContract {
     interface Event : ViewEvent {
         data class OnDataChanged(val type: TextFieldType, val text: String) : Event
         data class OnScreenChanged(val screenType: ScreenType) : Event
+        object OnShowHidePasswordChanged : Event
     }
 
     data class State(
@@ -18,7 +19,8 @@ interface AuthContract {
         val name: String = "",
         val email: String = "",
         val password: String = "",
-        val passwordRepeat: String = ""
+        val passwordRepeat: String = "",
+        val showPassword: Boolean = false
     ) : ViewState {
 
         fun getFieldByType(type: TextFieldType): String {
@@ -36,5 +38,6 @@ interface AuthContract {
     interface Listener {
         fun onDataChanged(type: TextFieldType, text: String)
         fun onScreenChanged(type: ScreenType)
+        fun onShowHidePasswordChanged()
     }
 }

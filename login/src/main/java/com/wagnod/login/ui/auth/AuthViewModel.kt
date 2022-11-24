@@ -13,6 +13,7 @@ class AuthViewModel: BaseViewModel<Event, State, Effect>() {
         when (event) {
             is Event.OnDataChanged -> changeData(event.type, event.text)
             is Event.OnScreenChanged -> changeScreen(event.screenType)
+            is Event.OnShowHidePasswordChanged -> changePasswordVisibility()
         }
     }
 
@@ -30,5 +31,9 @@ class AuthViewModel: BaseViewModel<Event, State, Effect>() {
             ScreenType.LOGIN -> copy(screenType = ScreenType.LOGIN)
             ScreenType.SIGNUP -> copy(screenType = ScreenType.SIGNUP)
         }
+    }
+
+    private fun changePasswordVisibility() = setState {
+        copy(showPassword = !showPassword)
     }
 }

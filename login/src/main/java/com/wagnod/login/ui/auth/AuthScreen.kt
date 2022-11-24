@@ -1,24 +1,31 @@
 package com.wagnod.login.ui.auth
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.wagnod.core_ui.Navigator
+import com.wagnod.login.AccountServiceImpl
+import com.wagnod.login.R
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.data.AuthScreenViewsData
 import com.wagnod.login.ui.auth.data.ScreenType
@@ -34,27 +41,33 @@ fun AuthScreen(
         override fun onDataChanged(type: TextFieldType, text: String) {
             viewModel.setEvent(Event.OnDataChanged(type, text))
         }
+
         override fun onScreenChanged(type: ScreenType) {
             viewModel.setEvent(Event.OnScreenChanged(type))
+        }
+
+        override fun onShowHidePasswordChanged() {
+            viewModel.setEvent(Event.OnShowHidePasswordChanged)
         }
     }
 
     val state = viewModel.viewState.value
 
     BackHandler {
-        when(state.screenType) {
+        when (state.screenType) {
             ScreenType.LOGIN -> navigator.back()
             ScreenType.SIGNUP -> listener.onScreenChanged(ScreenType.LOGIN)
         }
     }
 
-    AuthScreenContent(state, listener)
+    AuthScreenContent(state, listener, navigator)
 }
 
 @Composable
 fun AuthScreenContent(
     state: State,
-    listener: Listener?
+    listener: Listener?,
+    navigator: Navigator?
 ) = ConstraintLayout(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -72,7 +85,7 @@ fun AuthScreenContent(
     ) {
         Title(state)
         TextFields(state = state, listener = listener, type = state.screenType)
-        SignUpButton(state, listener)
+        SignUpButton(state, navigator)
     }
 
     val textModifier = Modifier.constrainAs(login) {
@@ -148,28 +161,77 @@ private fun InputView(
                 modifier = Modifier.size(24.dp),
                 contentDescription = ""
             )
+        },
+        visualTransformation = when (data.type) {
+            TextFieldType.CONFIRM, TextFieldType.PASSWORD -> {
+                if (state.showPassword) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                }
+            }
+
+            else -> VisualTransformation.None
+        },
+        trailingIcon = {
+            when (data.type) {
+                TextFieldType.CONFIRM, TextFieldType.PASSWORD ->
+                    Box(modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable {
+                            listener?.onShowHidePasswordChanged()
+                        }) {
+                        Icon(
+                            painter = painterResource(
+                                id = when (state.showPassword) {
+                                    true -> R.drawable.hide_password
+                                    false -> R.drawable.ic_show_password
+                                }
+                            ),
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .size(24.dp),
+                            contentDescription = ""
+                        )
+                    }
+                else -> null
+            }
+
         }
     )
+}
+
+fun buttonOnClick(
+    state: State,
+    navigator: Navigator?
+) {
+    val accountService = AccountServiceImpl()
+    when (state.screenType) {
+        ScreenType.SIGNUP -> {
+            accountService.linkAccount(
+                state.email,
+                state.password,
+                navigator
+            )
+        }
+        ScreenType.LOGIN -> {
+            accountService.authenticate(
+                state.email,
+                state.password,
+                navigator
+            )
+        }
+    }
 }
 
 @Composable
 private fun SignUpButton(
     state: State,
-    listener: Listener?
+    navigator: Navigator?
 ) {
     Button(
         onClick = {
-//            accountService.linkAccount(
-//                userLoginData.email,
-//                userLoginData.password
-//            ) {
-//                error ->
-//                if (error == null) {
-//                    navigator?.navigateToHome()
-//                } else {
-//                    error(error)
-//                }
-//            }
+            buttonOnClick(state, navigator)
         },
         shape = RoundedCornerShape(50.dp),
         modifier = Modifier
