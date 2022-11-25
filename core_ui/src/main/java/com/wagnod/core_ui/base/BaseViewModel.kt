@@ -12,6 +12,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 // то, что ты видишь на экране (данные с экрана)
 interface ViewState
@@ -23,7 +24,9 @@ interface ViewEvent
 interface ViewSideEffect
 
 abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : ViewSideEffect> :
-    ViewModel() {
+    ViewModel(), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext = Dispatchers.Main + SupervisorJob()
 
     abstract fun setInitialState(): UiState
     abstract fun handleEvents(event: Event)

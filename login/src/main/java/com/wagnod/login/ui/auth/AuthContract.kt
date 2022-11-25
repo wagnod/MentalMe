@@ -12,6 +12,7 @@ interface AuthContract {
         data class OnDataChanged(val type: TextFieldType, val text: String) : Event
         data class OnScreenChanged(val screenType: ScreenType) : Event
         object OnShowHidePasswordChanged : Event
+        object OnAuthClick : Event
     }
 
     data class State(
@@ -39,5 +40,6 @@ interface AuthContract {
         fun onDataChanged(type: TextFieldType, text: String)
         fun onScreenChanged(type: ScreenType)
         fun onShowHidePasswordChanged()
+        fun onAuthClick()
     }
 }

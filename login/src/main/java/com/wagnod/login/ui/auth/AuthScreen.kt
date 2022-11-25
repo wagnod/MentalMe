@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.wagnod.core_ui.Navigator
-import com.wagnod.login.AccountServiceImpl
 import com.wagnod.login.R
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.data.AuthScreenViewsData
@@ -49,6 +48,10 @@ fun AuthScreen(
         override fun onShowHidePasswordChanged() {
             viewModel.setEvent(Event.OnShowHidePasswordChanged)
         }
+
+        override fun onAuthClick() {
+            viewModel.setEvent(Event.OnAuthClick)
+        }
     }
 
     val state = viewModel.viewState.value
@@ -60,14 +63,13 @@ fun AuthScreen(
         }
     }
 
-    AuthScreenContent(state, listener, navigator)
+    AuthScreenContent(state, listener)
 }
 
 @Composable
 fun AuthScreenContent(
     state: State,
-    listener: Listener?,
-    navigator: Navigator?
+    listener: Listener?
 ) = ConstraintLayout(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -85,7 +87,7 @@ fun AuthScreenContent(
     ) {
         Title(state)
         TextFields(state = state, listener = listener, type = state.screenType)
-        SignUpButton(state, navigator)
+        SignUpButton(state, listener)
     }
 
     val textModifier = Modifier.constrainAs(login) {
@@ -201,37 +203,14 @@ private fun InputView(
     )
 }
 
-fun buttonOnClick(
-    state: State,
-    navigator: Navigator?
-) {
-    val accountService = AccountServiceImpl()
-    when (state.screenType) {
-        ScreenType.SIGNUP -> {
-            accountService.linkAccount(
-                state.email,
-                state.password,
-                navigator
-            )
-        }
-        ScreenType.LOGIN -> {
-            accountService.authenticate(
-                state.email,
-                state.password,
-                navigator
-            )
-        }
-    }
-}
-
 @Composable
 private fun SignUpButton(
     state: State,
-    navigator: Navigator?
+    listener: Listener?
 ) {
     Button(
         onClick = {
-            buttonOnClick(state, navigator)
+            listener?.onAuthClick()
         },
         shape = RoundedCornerShape(50.dp),
         modifier = Modifier

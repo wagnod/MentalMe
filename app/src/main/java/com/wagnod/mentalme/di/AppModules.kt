@@ -3,6 +3,7 @@ package com.wagnod.mentalme.di
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.wagnod.core_ui.Navigator
+import com.wagnod.data.di.dataModule
 import com.wagnod.login.di.authModule
 import com.wagnod.navigation.NavigatorImpl
 import com.wagnod.navigation.di.navigationModules
@@ -20,5 +21,6 @@ private val mainActivityModule = module {
 val appModules = listOf(
     mainActivityModule,
     navigationModules,
-    authModule
+    authModule,
+    dataModule
 )
