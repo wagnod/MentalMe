@@ -28,6 +28,7 @@ import com.wagnod.login.R
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.data.AuthScreenViewsData
 import com.wagnod.login.ui.auth.data.ScreenType
+import com.wagnod.login.ui.auth.data.ScreenType.*
 import com.wagnod.login.ui.auth.data.TextFieldType
 import org.koin.androidx.compose.getViewModel
 
@@ -41,8 +42,8 @@ fun AuthScreen(
             viewModel.setEvent(Event.OnDataChanged(type, text))
         }
 
-        override fun onScreenChanged(type: ScreenType) {
-            viewModel.setEvent(Event.OnScreenChanged(type))
+        override fun onScreenChanged() {
+            viewModel.setEvent(Event.OnScreenChanged)
         }
 
         override fun onShowHidePasswordChanged() {
@@ -58,8 +59,8 @@ fun AuthScreen(
 
     BackHandler {
         when (state.screenType) {
-            ScreenType.LOGIN -> navigator.back()
-            ScreenType.SIGNUP -> listener.onScreenChanged(ScreenType.LOGIN)
+            SIGN_IN -> navigator.back()
+            SIGN_UP -> listener.onScreenChanged()
         }
     }
 
@@ -105,8 +106,8 @@ private fun Title(
     Text(
         modifier = Modifier.padding(vertical = 10.dp),
         text = when (state.screenType) {
-            ScreenType.SIGNUP -> "Sign Up"
-            ScreenType.LOGIN -> "Login"
+            SIGN_UP -> "Sign Up"
+            SIGN_IN -> "Login"
         },
         style = TextStyle(fontSize = 30.sp)
     )
@@ -120,17 +121,12 @@ private fun TextFields(
 ) {
     LazyColumn {
         val list = AuthScreenViewsData.getAuthScreenViewsData()
-        when (type) {
-            ScreenType.LOGIN -> {
-                items(list.slice(1..2)) { item ->
-                    InputView(state = state, listener = listener, data = item)
-                }
-            }
-            ScreenType.SIGNUP -> {
-                items(list) { item ->
-                    InputView(state = state, listener = listener, data = item)
-                }
-            }
+        val itemsList = when (type) {
+            SIGN_UP -> list
+            SIGN_IN -> list.slice(1..2)
+        }
+        items(itemsList) { item ->
+            InputView(state = state, listener = listener, data = item)
         }
     }
 }
@@ -172,33 +168,30 @@ private fun InputView(
                     PasswordVisualTransformation()
                 }
             }
-
             else -> VisualTransformation.None
         },
         trailingIcon = {
             when (data.type) {
                 TextFieldType.CONFIRM, TextFieldType.PASSWORD ->
-                    Box(modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable {
-                            listener?.onShowHidePasswordChanged()
-                        }) {
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable {
+                                listener?.onShowHidePasswordChanged()
+                            }
+                    ) {
                         Icon(
+                            contentDescription = "",
                             painter = painterResource(
-                                id = when (state.showPassword) {
-                                    true -> R.drawable.hide_password
-                                    false -> R.drawable.ic_show_password
-                                }
+                                id = if (state.showPassword) R.drawable.hide_password else R.drawable.ic_show_password
                             ),
                             modifier = Modifier
                                 .padding(6.dp)
-                                .size(24.dp),
-                            contentDescription = ""
+                                .size(24.dp)
                         )
                     }
                 else -> null
             }
-
         }
     )
 }
@@ -213,20 +206,17 @@ private fun SignUpButton(
             listener?.onAuthClick()
         },
         shape = RoundedCornerShape(50.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.primary
+        ),
         modifier = Modifier
             .padding(horizontal = 50.dp, vertical = 10.dp)
             .fillMaxWidth()
-            .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.primary
-        )
+            .height(50.dp)
     )
     {
         Text(
-            text = when (state.screenType) {
-                ScreenType.SIGNUP -> "Sign Up"
-                ScreenType.LOGIN -> "Login"
-            }
+            text = if (state.screenType == SIGN_UP) "Sign Up" else "Login"
         )
     }
 }
@@ -243,24 +233,20 @@ private fun BottomText(
     ) {
         Text(
             text = when (state.screenType) {
-                ScreenType.SIGNUP -> "Already have an account? "
-                ScreenType.LOGIN -> "Don't have an account? "
+                SIGN_UP -> "Already have an account? "
+                SIGN_IN -> "Don't have an account? "
             },
             style = TextStyle(fontSize = 14.sp)
         )
         ClickableText(
             text = AnnotatedString(
                 when (state.screenType) {
-                    ScreenType.SIGNUP -> "Sign in here"
-                    ScreenType.LOGIN -> "Sign up here"
+                    SIGN_UP -> "Sign in here"
+                    SIGN_IN -> "Sign up here"
                 }
             ),
             onClick = {
-                when (state.screenType) {
-                    ScreenType.SIGNUP -> listener?.onScreenChanged(ScreenType.LOGIN)
-                    ScreenType.LOGIN -> listener?.onScreenChanged(ScreenType.SIGNUP)
-                }
-
+                listener?.onScreenChanged()
             },
             style = TextStyle(
                 fontSize = 14.sp,

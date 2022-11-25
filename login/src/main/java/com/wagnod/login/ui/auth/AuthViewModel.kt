@@ -1,13 +1,12 @@
 package com.wagnod.login.ui.auth
 
-import androidx.lifecycle.viewModelScope
 import com.wagnod.core_ui.base.BaseViewModel
 import com.wagnod.domain.login.repository.AuthData
 import com.wagnod.domain.login.usecase.SignInUseCase
 import com.wagnod.domain.login.usecase.SignUpUseCase
 import com.wagnod.login.ui.auth.AuthContract.*
-import com.wagnod.login.ui.auth.data.ScreenType
-import com.wagnod.login.ui.auth.data.ScreenType.*
+import com.wagnod.login.ui.auth.data.ScreenType.SIGN_IN
+import com.wagnod.login.ui.auth.data.ScreenType.SIGN_UP
 import com.wagnod.login.ui.auth.data.TextFieldType
 import com.wagnod.login.ui.auth.data.TextFieldType.*
 import kotlinx.coroutines.launch
@@ -22,7 +21,7 @@ class AuthViewModel(
     override fun handleEvents(event: Event) {
         when (event) {
             is Event.OnDataChanged -> changeData(event.type, event.text)
-            is Event.OnScreenChanged -> changeScreen(event.screenType)
+            is Event.OnScreenChanged -> toggleScreenType()
             is Event.OnShowHidePasswordChanged -> changePasswordVisibility()
             is Event.OnAuthClick -> auth()
         }
@@ -31,9 +30,17 @@ class AuthViewModel(
     private fun auth() = launch {
         val data = AuthData(viewState.value.email, viewState.value.password)
         when (viewState.value.screenType) {
-            LOGIN -> signInUseCase.execute(data)
-            SIGNUP -> signUpUseCase.execute(data)
+            SIGN_IN -> signIn(data)
+            SIGN_UP -> signUp(data)
         }
+    }
+
+    private suspend fun signIn(authData: AuthData) = runCatching {
+        signInUseCase.execute(authData)
+    }
+
+    private suspend fun signUp(authData: AuthData) = runCatching {
+        signUpUseCase.execute(authData)
     }
 
     private fun changeData(type: TextFieldType, text: String) = setState {
@@ -45,10 +52,10 @@ class AuthViewModel(
         }
     }
 
-    private fun changeScreen(type: ScreenType) = setState {
-        when (type) {
-            LOGIN -> copy(screenType = LOGIN)
-            SIGNUP -> copy(screenType = SIGNUP)
+    private fun toggleScreenType() = setState {
+        when (viewState.value.screenType) {
+            SIGN_IN -> copy(screenType = SIGN_UP)
+            SIGN_UP -> copy(screenType = SIGN_IN)
         }
     }
 

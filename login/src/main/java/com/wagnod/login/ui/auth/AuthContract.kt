@@ -4,19 +4,20 @@ import com.wagnod.core_ui.base.ViewEvent
 import com.wagnod.core_ui.base.ViewSideEffect
 import com.wagnod.core_ui.base.ViewState
 import com.wagnod.login.ui.auth.data.ScreenType
+import com.wagnod.login.ui.auth.data.ScreenType.*
 import com.wagnod.login.ui.auth.data.TextFieldType
 
 interface AuthContract {
 
     interface Event : ViewEvent {
         data class OnDataChanged(val type: TextFieldType, val text: String) : Event
-        data class OnScreenChanged(val screenType: ScreenType) : Event
+        object OnScreenChanged : Event
         object OnShowHidePasswordChanged : Event
         object OnAuthClick : Event
     }
 
     data class State(
-        val screenType: ScreenType = ScreenType.LOGIN,
+        val screenType: ScreenType = SIGN_IN,
         val name: String = "",
         val email: String = "",
         val password: String = "",
@@ -38,7 +39,7 @@ interface AuthContract {
 
     interface Listener {
         fun onDataChanged(type: TextFieldType, text: String)
-        fun onScreenChanged(type: ScreenType)
+        fun onScreenChanged()
         fun onShowHidePasswordChanged()
         fun onAuthClick()
     }
