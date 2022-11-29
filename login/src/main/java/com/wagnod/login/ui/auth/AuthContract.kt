@@ -35,7 +35,9 @@ interface AuthContract {
         }
     }
 
-    sealed interface Effect : ViewSideEffect
+    sealed interface Effect : ViewSideEffect {
+        object NavigateToHome : Effect
+    }
 
     interface Listener {
         fun onDataChanged(type: TextFieldType, text: String)

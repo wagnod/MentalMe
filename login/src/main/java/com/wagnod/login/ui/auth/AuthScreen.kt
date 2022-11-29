@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,9 +27,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.wagnod.core_ui.Navigator
 import com.wagnod.login.R
 import com.wagnod.login.ui.auth.AuthContract.*
+import com.wagnod.login.ui.auth.AuthContract.Effect.NavigateToHome
 import com.wagnod.login.ui.auth.data.AuthScreenViewsData
 import com.wagnod.login.ui.auth.data.ScreenType
-import com.wagnod.login.ui.auth.data.ScreenType.*
+import com.wagnod.login.ui.auth.data.ScreenType.SIGN_IN
+import com.wagnod.login.ui.auth.data.ScreenType.SIGN_UP
 import com.wagnod.login.ui.auth.data.TextFieldType
 import org.koin.androidx.compose.getViewModel
 
@@ -61,6 +64,14 @@ fun AuthScreen(
         when (state.screenType) {
             SIGN_IN -> navigator.back()
             SIGN_UP -> listener.onScreenChanged()
+        }
+    }
+
+    LaunchedEffect(true) {
+        viewModel.effect.collect { value ->
+            when (value) {
+                NavigateToHome -> navigator.navigateToHome()
+            }
         }
     }
 

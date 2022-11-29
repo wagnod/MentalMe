@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class AuthViewModel(
     private val signUpUseCase: SignUpUseCase,
     private val signInUseCase: SignInUseCase
-): BaseViewModel<Event, State, Effect>() {
+) : BaseViewModel<Event, State, Effect>() {
 
     override fun setInitialState() = State()
 
@@ -37,10 +37,14 @@ class AuthViewModel(
 
     private suspend fun signIn(authData: AuthData) = runCatching {
         signInUseCase.execute(authData)
+    }.onSuccess {
+        if (it) setEffect { Effect.NavigateToHome }
     }
 
     private suspend fun signUp(authData: AuthData) = runCatching {
         signUpUseCase.execute(authData)
+    }.onSuccess {
+        if (it) setEffect { Effect.NavigateToHome }
     }
 
     private fun changeData(type: TextFieldType, text: String) = setState {

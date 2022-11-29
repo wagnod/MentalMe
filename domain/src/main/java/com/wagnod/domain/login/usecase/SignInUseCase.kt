@@ -6,9 +6,7 @@ import com.wagnod.domain.login.repository.FirebaseRepository
 
 class SignInUseCase(
     private val repository: FirebaseRepository
-) : UseCase<AuthData, Unit> {
+) : UseCase<AuthData, Boolean> {
 
-    override suspend fun execute(input: AuthData) {
-        repository.signIn(input)
-    }
+    override suspend fun execute(input: AuthData) = repository.signIn(input)
 }

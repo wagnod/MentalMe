@@ -1,8 +1,8 @@
 package com.wagnod.domain.login.repository
 
 interface FirebaseRepository {
-    suspend fun signIn(authData: AuthData)
-    suspend fun signUp(authData: AuthData)
+    suspend fun signIn(authData: AuthData) : Boolean
+    suspend fun signUp(authData: AuthData) : Boolean
 }
 
 data class AuthData(
