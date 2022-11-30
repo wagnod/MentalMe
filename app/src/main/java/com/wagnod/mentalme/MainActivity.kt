@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -44,25 +42,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomBar(navigator: Navigator) {
-
-    val selectedIndex = remember { mutableStateOf(0) }
+    val currentRoute = navigator.currentRoute()
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.primary
     ) {
-        NavSections.values().forEach {
+        NavSections.values().forEach { section ->
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        painter = painterResource(it.icon),
+                        painter = painterResource(section.icon),
                         "home navigation button",
                         modifier = Modifier.size(30.dp)
                     )
-                }, label = { Text(stringResource(it.title)) },
+                }, label = { Text(stringResource(section.title)) },
                 alwaysShowLabel = false,
-                selected = (selectedIndex.value == it.value),
+                selected = (currentRoute == section.route),
                 onClick = {
-                    it.tabNavigationCallback(navigator)
-                    selectedIndex.value = it.value
+                    section.tabNavigationCallback(navigator)
                 }
             )
         }

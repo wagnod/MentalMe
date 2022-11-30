@@ -9,6 +9,7 @@ import com.wagnod.login.ui.auth.data.ScreenType.SIGN_IN
 import com.wagnod.login.ui.auth.data.ScreenType.SIGN_UP
 import com.wagnod.login.ui.auth.data.TextFieldType
 import com.wagnod.login.ui.auth.data.TextFieldType.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
@@ -27,24 +28,38 @@ class AuthViewModel(
         }
     }
 
-    private fun auth() = launch {
-        val data = AuthData(viewState.value.email, viewState.value.password)
-        when (viewState.value.screenType) {
-            SIGN_IN -> signIn(data)
-            SIGN_UP -> signUp(data)
+    private fun auth() {
+        setState { copy(buttonEnabled = false) }
+        launch {
+            val data = AuthData(viewState.value.email, viewState.value.password)
+            when (viewState.value.screenType) {
+                SIGN_IN -> signIn(data)
+                SIGN_UP -> signUp(data)
+            }
         }
+    }
+
+    private suspend fun hideProgress() {
+        delay(500)
+        setState { copy(buttonEnabled = true) }
     }
 
     private suspend fun signIn(authData: AuthData) = runCatching {
         signInUseCase.execute(authData)
     }.onSuccess {
+        hideProgress()
         if (it) setEffect { Effect.NavigateToHome }
+    }.onFailure {
+        hideProgress()
     }
 
     private suspend fun signUp(authData: AuthData) = runCatching {
         signUpUseCase.execute(authData)
     }.onSuccess {
+        hideProgress()
         if (it) setEffect { Effect.NavigateToHome }
+    }.onFailure {
+        hideProgress()
     }
 
     private fun changeData(type: TextFieldType, text: String) = setState {

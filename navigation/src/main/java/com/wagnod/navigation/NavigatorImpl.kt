@@ -77,6 +77,14 @@ class NavigatorImpl(
         mNavController.navigate(LoginRoute.route)
     }
 
+    override fun navigateToHomeAndClear() {
+        mNavController.navigate(NavSections.HOME.route) {
+            popUpTo(LoginRoute.route) {
+                inclusive = true
+            }
+        }
+    }
+
     @Composable
     override fun checkDestination() : Boolean {
         val entry = mNavController.currentBackStackEntryAsState()
@@ -89,4 +97,8 @@ class NavigatorImpl(
             else -> false
         }
     }
+
+    @Composable
+    override fun currentRoute() : String? =
+        mNavController.currentBackStackEntryAsState().value?.destination?.route
 }

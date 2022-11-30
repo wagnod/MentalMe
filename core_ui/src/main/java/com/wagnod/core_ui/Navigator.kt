@@ -30,7 +30,11 @@ interface Navigator {
     fun navigateToFriends()
     fun navigateToProfile()
     fun navigateToLogin()
+    fun navigateToHomeAndClear()
 
     @Composable
     fun checkDestination(): Boolean
+
+    @Composable
+    fun currentRoute(): String?
 }

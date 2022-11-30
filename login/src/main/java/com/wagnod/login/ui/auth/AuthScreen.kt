@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
@@ -37,7 +39,7 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun AuthScreen(
-    navigator: Navigator,
+    navigator: Navigator? = null,
     viewModel: AuthViewModel = getViewModel()
 ) {
     val listener = object : Listener {
@@ -62,7 +64,7 @@ fun AuthScreen(
 
     BackHandler {
         when (state.screenType) {
-            SIGN_IN -> navigator.back()
+            SIGN_IN -> navigator?.back()
             SIGN_UP -> listener.onScreenChanged()
         }
     }
@@ -70,7 +72,7 @@ fun AuthScreen(
     LaunchedEffect(true) {
         viewModel.effect.collect { value ->
             when (value) {
-                NavigateToHome -> navigator.navigateToHome()
+                NavigateToHome -> navigator?.navigateToHomeAndClear()
             }
         }
     }
@@ -149,7 +151,9 @@ private fun InputView(
     data: AuthScreenViewsData
 ) {
     TextField(
-        modifier = Modifier.padding(vertical = 10.dp),
+        modifier = Modifier
+            .fillMaxWidth(0.75f)
+            .padding(vertical = 10.dp),
         value = state.getFieldByType(data.type),
         onValueChange = {
             listener?.onDataChanged(data.type, it)
@@ -164,6 +168,7 @@ private fun InputView(
             disabledIndicatorColor = Color.Transparent
         ),
         shape = RoundedCornerShape(8.dp),
+        singleLine = true,
         leadingIcon = {
             Icon(
                 painterResource(id = data.icon),
@@ -180,6 +185,12 @@ private fun InputView(
                 }
             }
             else -> VisualTransformation.None
+        },
+        keyboardOptions = when (data.type) {
+            TextFieldType.CONFIRM, TextFieldType.PASSWORD ->
+                KeyboardOptions(keyboardType = KeyboardType.Password)
+
+            else -> KeyboardOptions(keyboardType = KeyboardType.Text)
         },
         trailingIcon = {
             when (data.type) {
@@ -218,17 +229,26 @@ private fun SignUpButton(
         },
         shape = RoundedCornerShape(50.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.primary
+            backgroundColor = MaterialTheme.colors.primary,
+            disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.4f)
         ),
         modifier = Modifier
             .padding(horizontal = 50.dp, vertical = 10.dp)
             .fillMaxWidth()
-            .height(50.dp)
+            .height(50.dp),
+        enabled = state.buttonEnabled
     )
     {
-        Text(
-            text = if (state.screenType == SIGN_UP) "Sign Up" else "Login"
-        )
+        if (state.buttonEnabled) {
+            Text(
+                text = if (state.screenType == SIGN_UP) "Sign Up" else "Login"
+            )
+        } else {
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                strokeWidth = 3.dp
+            )
+        }
     }
 }
 

@@ -22,7 +22,8 @@ interface AuthContract {
         val email: String = "",
         val password: String = "",
         val passwordRepeat: String = "",
-        val showPassword: Boolean = false
+        val showPassword: Boolean = false,
+        val buttonEnabled: Boolean = true
     ) : ViewState {
 
         fun getFieldByType(type: TextFieldType): String {
