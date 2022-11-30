@@ -30,6 +30,7 @@ import com.wagnod.core_ui.Navigator
 import com.wagnod.login.R
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.AuthContract.Effect.NavigateToHome
+import com.wagnod.login.ui.auth.AuthContract.Effect.NavigateToLoginScreen
 import com.wagnod.login.ui.auth.data.AuthScreenViewsData
 import com.wagnod.login.ui.auth.data.ScreenType
 import com.wagnod.login.ui.auth.data.ScreenType.SIGN_IN
@@ -39,13 +40,9 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun AuthScreen(
-    navigator: Navigator? = null,
+    navigator: Navigator,
     viewModel: AuthViewModel = getViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.setEvent(Event.CheckIsUserAuthorized)
-    }
-
     val listener = object : Listener {
         override fun onDataChanged(type: TextFieldType, text: String) {
             viewModel.setEvent(Event.OnDataChanged(type, text))
@@ -68,7 +65,7 @@ fun AuthScreen(
 
     BackHandler {
         when (state.screenType) {
-            SIGN_IN -> navigator?.back()
+            SIGN_IN -> navigator.back()
             SIGN_UP -> listener.onScreenChanged()
         }
     }
@@ -76,7 +73,8 @@ fun AuthScreen(
     LaunchedEffect(true) {
         viewModel.effect.collect { value ->
             when (value) {
-                NavigateToHome -> navigator?.navigateToHomeAndClear()
+                NavigateToHome -> navigator.navigateToHomeAndClear()
+                NavigateToLoginScreen -> navigator.navigateToLogin()
             }
         }
     }

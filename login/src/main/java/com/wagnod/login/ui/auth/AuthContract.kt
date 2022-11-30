@@ -39,6 +39,7 @@ interface AuthContract {
 
     sealed interface Effect : ViewSideEffect {
         object NavigateToHome : Effect
+        object NavigateToLoginScreen : Effect
     }
 
     interface Listener {

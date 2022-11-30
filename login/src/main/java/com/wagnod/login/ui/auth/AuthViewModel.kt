@@ -70,7 +70,11 @@ class AuthViewModel(
         runCatching {
             checkIsUserAuthorizedUseCase.execute()
         }.onSuccess {
-            if (it) setEffect { Effect.NavigateToHome }
+            if (it) {
+                setEffect { Effect.NavigateToHome }
+            } else {
+                setEffect { Effect.NavigateToLoginScreen }
+            }
         }
     }
 
