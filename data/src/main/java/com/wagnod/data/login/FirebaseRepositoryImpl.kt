@@ -27,4 +27,6 @@ class FirebaseRepositoryImpl(
             .user
         user != null
     }
+
+    override suspend fun isUserAuthorised() = auth.currentUser != null
 }

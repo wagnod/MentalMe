@@ -4,4 +4,4 @@ interface UseCase<Input, Output> {
     suspend fun execute(input: Input): Output
 }
 
-suspend fun UseCase<Unit, Any>.execute() = execute(Unit)
+suspend fun <T> UseCase<Unit, T>.execute(): T = execute(Unit)

@@ -14,6 +14,7 @@ interface AuthContract {
         object OnScreenChanged : Event
         object OnShowHidePasswordChanged : Event
         object OnAuthClick : Event
+        object CheckIsUserAuthorized : Event
     }
 
     data class State(

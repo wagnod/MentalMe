@@ -2,6 +2,7 @@ package com.wagnod.login.di
 
 import com.wagnod.data.login.FirebaseRepositoryImpl
 import com.wagnod.domain.login.repository.FirebaseRepository
+import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
 import com.wagnod.domain.login.usecase.SignInUseCase
 import com.wagnod.domain.login.usecase.SignUpUseCase
 import com.wagnod.login.ui.auth.AuthViewModel
@@ -15,7 +16,8 @@ val authModule = module {
     // useCase
     factory { SignUpUseCase(get()) }
     factory { SignInUseCase(get()) }
+    factory { CheckIsUserAuthorizedUseCase(get()) }
 
     // viewModel
-    viewModel { AuthViewModel(get(), get()) }
+    viewModel { AuthViewModel(get(), get(), get()) }
 }

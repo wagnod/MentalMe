@@ -1,7 +1,9 @@
 package com.wagnod.login.ui.auth
 
 import com.wagnod.core_ui.base.BaseViewModel
+import com.wagnod.domain.execute
 import com.wagnod.domain.login.repository.AuthData
+import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
 import com.wagnod.domain.login.usecase.SignInUseCase
 import com.wagnod.domain.login.usecase.SignUpUseCase
 import com.wagnod.login.ui.auth.AuthContract.*
@@ -14,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val signUpUseCase: SignUpUseCase,
-    private val signInUseCase: SignInUseCase
+    private val signInUseCase: SignInUseCase,
+    private val checkIsUserAuthorizedUseCase: CheckIsUserAuthorizedUseCase
 ) : BaseViewModel<Event, State, Effect>() {
 
     override fun setInitialState() = State()
@@ -25,6 +28,7 @@ class AuthViewModel(
             is Event.OnScreenChanged -> toggleScreenType()
             is Event.OnShowHidePasswordChanged -> changePasswordVisibility()
             is Event.OnAuthClick -> auth()
+            is Event.CheckIsUserAuthorized -> isUserAuthorised()
         }
     }
 
@@ -60,6 +64,14 @@ class AuthViewModel(
         if (it) setEffect { Effect.NavigateToHome }
     }.onFailure {
         hideProgress()
+    }
+
+    private fun isUserAuthorised() = launch {
+        runCatching {
+            checkIsUserAuthorizedUseCase.execute()
+        }.onSuccess {
+            if (it) setEffect { Effect.NavigateToHome }
+        }
     }
 
     private fun changeData(type: TextFieldType, text: String) = setState {

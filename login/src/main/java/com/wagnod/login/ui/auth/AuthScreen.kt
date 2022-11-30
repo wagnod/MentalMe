@@ -42,6 +42,10 @@ fun AuthScreen(
     navigator: Navigator? = null,
     viewModel: AuthViewModel = getViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(Event.CheckIsUserAuthorized)
+    }
+
     val listener = object : Listener {
         override fun onDataChanged(type: TextFieldType, text: String) {
             viewModel.setEvent(Event.OnDataChanged(type, text))
