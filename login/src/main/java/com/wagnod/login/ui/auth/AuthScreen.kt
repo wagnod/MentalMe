@@ -8,17 +8,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -36,6 +40,7 @@ import com.wagnod.login.ui.auth.data.ScreenType
 import com.wagnod.login.ui.auth.data.ScreenType.SIGN_IN
 import com.wagnod.login.ui.auth.data.ScreenType.SIGN_UP
 import com.wagnod.login.ui.auth.data.TextFieldType
+import com.wagnod.login.ui.auth.data.TextFieldType.*
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -146,12 +151,27 @@ private fun TextFields(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun InputView(
     state: State,
     listener: Listener?,
     data: AuthScreenViewsData
 ) {
+    val imeAction = when (data.type) {
+        PASSWORD -> if (state.screenType == SIGN_UP) ImeAction.Next else ImeAction.Done
+        CONFIRM -> ImeAction.Done
+        else -> ImeAction.Next
+    }
+
+    val keyboardType = when (data.type) {
+        NAME -> KeyboardType.Text
+        EMAIL -> KeyboardType.Email
+        PASSWORD, CONFIRM -> KeyboardType.Password
+    }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     TextField(
         modifier = Modifier
             .fillMaxWidth(0.75f)
@@ -179,7 +199,7 @@ private fun InputView(
             )
         },
         visualTransformation = when (data.type) {
-            TextFieldType.CONFIRM, TextFieldType.PASSWORD -> {
+            CONFIRM, PASSWORD -> {
                 if (state.showPassword) {
                     VisualTransformation.None
                 } else {
@@ -188,33 +208,35 @@ private fun InputView(
             }
             else -> VisualTransformation.None
         },
-        keyboardOptions = when (data.type) {
-            TextFieldType.CONFIRM, TextFieldType.PASSWORD ->
-                KeyboardOptions(keyboardType = KeyboardType.Password)
-
-            else -> KeyboardOptions(keyboardType = KeyboardType.Text)
-        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = imeAction
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                listener?.onAuthClick()
+            }
+        ),
         trailingIcon = {
-            when (data.type) {
-                TextFieldType.CONFIRM, TextFieldType.PASSWORD ->
-                    Box(
+            if (data.type == CONFIRM || data.type ==PASSWORD ) {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable {
+                            listener?.onShowHidePasswordChanged()
+                        }
+                ) {
+                    Icon(
+                        contentDescription = "",
+                        painter = painterResource(
+                            id = if (state.showPassword) R.drawable.hide_password else R.drawable.ic_show_password
+                        ),
                         modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable {
-                                listener?.onShowHidePasswordChanged()
-                            }
-                    ) {
-                        Icon(
-                            contentDescription = "",
-                            painter = painterResource(
-                                id = if (state.showPassword) R.drawable.hide_password else R.drawable.ic_show_password
-                            ),
-                            modifier = Modifier
-                                .padding(6.dp)
-                                .size(24.dp)
-                        )
-                    }
-                else -> null
+                            .padding(6.dp)
+                            .size(24.dp)
+                    )
+                }
             }
         }
     )
