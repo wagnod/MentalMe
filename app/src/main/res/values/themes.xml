@@ -2,6 +2,11 @@
 <resources>
 
     <style name="Theme.MentalMe" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">@color/base_blue</item>
     </style>
+
+    <style name="SplashScreenTheme" parent="Theme.MentalMe">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
 </resources>

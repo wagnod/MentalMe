@@ -20,6 +20,12 @@ class AuthViewModel(
     private val checkIsUserAuthorizedUseCase: CheckIsUserAuthorizedUseCase
 ) : BaseViewModel<Event, State, Effect>() {
 
+    init {
+        if (checkIsUserAuthorizedUseCase.isUserAuthorized()) {
+            setEffect { Effect.NavigateToHome }
+        }
+    }
+
     override fun setInitialState() = State()
 
     override fun handleEvents(event: Event) {

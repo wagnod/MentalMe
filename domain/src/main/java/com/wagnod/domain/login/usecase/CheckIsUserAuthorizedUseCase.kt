@@ -7,5 +7,11 @@ class CheckIsUserAuthorizedUseCase(
     private val repository: FirebaseRepository
 ) : UseCase<Unit, Boolean> {
 
-    override suspend fun execute(input: Unit): Boolean = repository.isUserAuthorised()
+    private var isUserAuthorized = false
+
+    fun isUserAuthorized() = isUserAuthorized
+
+    override suspend fun execute(input: Unit): Boolean = repository.isUserAuthorised().also {
+        isUserAuthorized = it
+    }
 }
