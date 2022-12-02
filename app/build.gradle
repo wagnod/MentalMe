@@ -50,6 +50,7 @@ dependencies {
     implementation project(path: ':core_ui')
     implementation project(path: ':login')
     implementation project(path: ':navigation')
+    implementation project(path: ':profile')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation "androidx.compose.ui:ui:$compose_version"

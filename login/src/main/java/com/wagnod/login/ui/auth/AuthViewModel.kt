@@ -41,7 +41,11 @@ class AuthViewModel(
     private fun auth() {
         setState { copy(buttonEnabled = false) }
         launch {
-            val data = AuthData(viewState.value.email, viewState.value.password)
+            val data = AuthData(
+                email = viewState.value.email,
+                password = viewState.value.password,
+                name = viewState.value.name
+            )
             when (viewState.value.screenType) {
                 SIGN_IN -> signIn(data)
                 SIGN_UP -> signUp(data)
