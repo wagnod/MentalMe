@@ -11,7 +11,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,10 +22,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
+import com.wagnod.domain.Goal
 import com.wagnod.home.R
-import com.wagnod.home.goals.data.GoalItem
 
-private lateinit var goalItem: GoalItem
+private lateinit var goalItem: Goal
 
 @Composable
 fun GoalCreator(
@@ -35,7 +34,7 @@ fun GoalCreator(
     ToolBar(navigator)
     val title = goalTitle()
     val text = goalText()
-    goalItem = GoalItem(title, text, false)
+    goalItem = Goal(title, text, false)
 }
 
 @Composable

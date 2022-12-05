@@ -7,7 +7,7 @@ import androidx.navigation.navigation
 import com.wagnod.core_ui.Navigator
 import com.wagnod.home.HomeScreen
 import com.wagnod.home.diary.Diary
-import com.wagnod.home.goals.Goals
+import com.wagnod.home.goals.GoalsScreen
 import com.wagnod.home.tracker.MoodTracker
 import com.wagnod.core_ui.home.HomeNavigator
 import com.wagnod.home.goals.GoalCreator
@@ -26,7 +26,7 @@ class HomeNavigatorImpl : HomeNavigator {
             composable(NavSections.HOME.route) { HomeScreen(navigator) }
             composable(HomeNavRoutes.TRACKER.route) { MoodTracker() }
             composable(HomeNavRoutes.DIARY.route) { Diary() }
-            composable(HomeNavRoutes.GOALS.route) { Goals(navigator) }
+            composable(HomeNavRoutes.GOALS.route) { GoalsScreen(navigator) }
             composable(HomeNavRoutes.CREATE_GOAL.route) { GoalCreator(navigator) }
         }
     }

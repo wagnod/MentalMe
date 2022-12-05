@@ -12,14 +12,15 @@ data class UserInfo(
     @SerialName("name")
     val name: String = "",
     @SerialName("status")
-    val status: String = ""
+    val status: String = "",
+    @SerialName("goals")
+    val goals: List<Goal> = listOf()
 )
 
-fun UserInfo.toMap(): Map<String, Any?> {
-    return mapOf(
-        "id" to id,
-        "userImage" to userImage,
-        "name" to name,
-        "status" to status,
-    )
-}
+fun UserInfo.toMap() = mapOf(
+    "id" to id,
+    "userImage" to userImage,
+    "name" to name,
+    "status" to status,
+    "goals" to goals
+)

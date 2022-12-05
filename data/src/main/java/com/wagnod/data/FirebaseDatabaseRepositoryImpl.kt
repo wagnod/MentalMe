@@ -7,19 +7,22 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.wagnod.domain.FirebaseDatabaseRepository
+import com.wagnod.domain.Goal
 import com.wagnod.domain.UserInfo
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.withContext
 
 class FirebaseDatabaseRepositoryImpl(
-    database: FirebaseDatabase,
-    auth: FirebaseAuth
+    private val database: FirebaseDatabase,
+    private val auth: FirebaseAuth,
+    private val dispatchers: AppDispatchers
 ) : FirebaseDatabaseRepository {
 
     private val userReference = database.getReference("$USERS_REFERENCE/${auth.currentUser?.uid}")
 
-    override fun getUserData() = callbackFlow {
+    override suspend fun getUserData() = callbackFlow {
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val userInfo = dataSnapshot.getValue(UserInfo::class.java)
@@ -36,6 +39,14 @@ class FirebaseDatabaseRepositoryImpl(
             userReference.removeEventListener(valueEventListener)
         }
     }
+
+    override suspend fun createGoal(goals: List<Goal>) = withContext(dispatchers.io) {
+        val childUpdates = hashMapOf<String, Any>(
+            "$USERS_REFERENCE/${auth.currentUser?.uid}/goals" to goals,
+        )
+        database.reference.updateChildren(childUpdates).isSuccessful
+    }
+
 
     private companion object {
         const val USERS_REFERENCE = "users"
