@@ -6,7 +6,6 @@ interface FirebaseRepository {
     suspend fun signIn(authData: AuthData) : Boolean
     suspend fun signUp(authData: AuthData) : Boolean
     suspend fun isUserAuthorised() : Boolean
-    suspend fun getUserInfo() : UserInfo
 }
 
 data class AuthData(

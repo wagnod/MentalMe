@@ -3,8 +3,8 @@ package com.wagnod.profile.ui
 import com.wagnod.core_ui.base.BaseViewModel
 import com.wagnod.domain.execute
 import com.wagnod.domain.home.usecase.GetUserInfoUseCase
-import com.wagnod.profile.ui.ProfileContract.*
 import com.wagnod.profile.data.User
+import com.wagnod.profile.ui.ProfileContract.*
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
@@ -24,9 +24,11 @@ class ProfileViewModel(
 
     private fun loadData() = launch {
         runCatching {
-            getUserInfoUseCase.execute()
-        }.onSuccess { data ->
-            changeData(mapper.mapUserInfoToUser(data))
+            getUserInfoUseCase
+                .execute()
+                .collect { data ->
+                    if (data != null) changeData(mapper.mapUserInfoToUser(data))
+                }
         }
     }
 

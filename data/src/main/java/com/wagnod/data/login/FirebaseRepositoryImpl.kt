@@ -1,10 +1,8 @@
 package com.wagnod.data.login
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.getValue
 import com.wagnod.data.AppDispatchers
 import com.wagnod.domain.UserInfo
 import com.wagnod.domain.login.repository.AuthData
@@ -58,13 +56,4 @@ class FirebaseRepositoryImpl(
     }
 
     override suspend fun isUserAuthorised() = auth.currentUser != null
-
-    override suspend fun getUserInfo() = withContext(dispatchers.io) {
-        val path = auth.currentUser?.uid ?: ""
-        val user = database.reference.child("users").child(path).get()
-            .asDeferred()
-            .await()
-            .getValue<UserInfo>()
-        user ?: throw IllegalStateException("getUserInfo() wrong state")
-    }
 }
