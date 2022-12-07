@@ -54,7 +54,11 @@ class NavigatorImpl(
     }
 
     override fun navigateToHome() {
-        mNavController.navigate(NavSections.HOME.route)
+        mNavController.navigate(NavSections.HOME.route) {
+            popUpTo(NavSections.HOME.route) {
+                inclusive = true
+            }
+        }
     }
 
     override fun navigateToSearch() {

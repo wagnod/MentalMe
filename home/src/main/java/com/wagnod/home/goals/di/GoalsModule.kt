@@ -4,7 +4,7 @@ import com.wagnod.data.FirebaseDatabaseRepositoryImpl
 import com.wagnod.data.login.FirebaseRepositoryImpl
 import com.wagnod.domain.FirebaseDatabaseRepository
 import com.wagnod.domain.home.usecase.GetUserInfoUseCase
-import com.wagnod.domain.home.usecase.PutGoalsUseCase
+import com.wagnod.domain.home.usecase.PutGoalsToDatabaseUseCase
 import com.wagnod.domain.login.repository.FirebaseRepository
 import com.wagnod.home.goals.GoalsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,7 +17,7 @@ val goalsModule = module {
 
     // useCase
     factory { GetUserInfoUseCase(get()) }
-    factory { PutGoalsUseCase(get()) }
+    factory { PutGoalsToDatabaseUseCase(get()) }
 
     // viewModel
     viewModel { GoalsViewModel(get(), get()) }

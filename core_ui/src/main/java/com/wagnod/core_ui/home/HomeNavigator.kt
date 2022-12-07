@@ -7,4 +7,5 @@ interface HomeNavigator : ModuleNavigator {
     fun navigateToDiary()
     fun navigateToTracker()
     fun navigateToGoalCreator()
+    fun navigateToGoalsFromInner()
 }

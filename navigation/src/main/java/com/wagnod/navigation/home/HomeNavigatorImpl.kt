@@ -35,6 +35,12 @@ class HomeNavigatorImpl : HomeNavigator {
         mNavController.navigate(HomeNavRoutes.GOALS.route)
     }
 
+    override fun navigateToGoalsFromInner() {
+        mNavController.navigate(HomeNavRoutes.GOALS.route) {
+            popUpTo(HomeNavRoutes.GOALS.route) {inclusive = true}
+        }
+    }
+
     override fun navigateToDiary() {
         mNavController.navigate(HomeNavRoutes.DIARY.route)
     }

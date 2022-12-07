@@ -8,38 +8,71 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.wagnod.core_ui.Navigator
-import com.wagnod.core_ui.theme.MentalMeTheme
 import com.wagnod.domain.Goal
 import com.wagnod.home.R
-
-private lateinit var goalItem: Goal
+import com.wagnod.home.goals.GoalsContract.*
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun GoalCreator(
-    navigator: Navigator? = null
+    navigator: Navigator,
+    viewModel: GoalsViewModel = getViewModel()
+) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.setEvent(Event.Init)
+    }
+
+    val state = viewModel.viewState.value
+    val listener = object : GoalsCreatorListener {
+        override fun onSaveButtonClicked(goal: Goal) {
+            viewModel.setEvent(Event.OnSaveButtonClicked(goal))
+        }
+
+        override fun onChosenGoalChanged(goal: Goal) {
+            viewModel.setEvent(Event.OnChosenGoalChanged(goal))
+        }
+    }
+
+    LaunchedEffect(true) {
+        viewModel.effect.collect { value ->
+            when (value) {
+                Effect.NavigateToGoalsScreen -> navigator.homeNavigator.navigateToGoalsFromInner()
+                Effect.NavigateToGoalsCreator -> navigator.homeNavigator.navigateToGoalCreator()
+            }
+        }
+    }
+
+    GoalCreatorContent(navigator, listener, state)
+}
+
+@Composable
+fun GoalCreatorContent(
+    navigator: Navigator,
+    listener: GoalsCreatorListener,
+    state: State
 ) = Column(Modifier.fillMaxSize()) {
-    ToolBar(navigator)
-    val title = goalTitle()
-    val text = goalText()
-    goalItem = Goal(title, text, false)
+    ToolBar(navigator, listener, state)
+    goalTitle(state, listener)
+    goalText(state, listener)
 }
 
 @Composable
 fun ToolBar(
-    navigator: Navigator? = null
+    navigator: Navigator,
+    listener: GoalsCreatorListener,
+    state: State
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -61,7 +94,7 @@ fun ToolBar(
                     start.linkTo(parent.start)
                     end.linkTo(title.start)
                 }
-                .clickable { navigator?.homeNavigator?.navigateToGoals() }
+                .clickable { navigator.homeNavigator.navigateToGoalsFromInner() }
         )
         Text(
             text = "Добавить цель",
@@ -92,18 +125,26 @@ fun ToolBar(
                     start.linkTo(title.end)
                     end.linkTo(parent.end)
                 }
-                .clickable { navigator?.homeNavigator?.navigateToGoals() }
+                .clickable { listener.onSaveButtonClicked(state.chosenGoal) }
         )
     }
 }
 
 @Composable
-fun goalTitle(): String {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+fun goalTitle(
+    state: State,
+    listener: GoalsCreatorListener
+) {
     TextField(
-        value = text,
+        value = state.chosenGoal.name,
         onValueChange = {
-            text = it
+            listener.onChosenGoalChanged(
+                Goal(
+                    name = it,
+                    description = state.chosenGoal.description,
+                    checked = state.chosenGoal.checked
+                )
+            )
         },
         modifier = Modifier
             .fillMaxWidth(),
@@ -114,16 +155,23 @@ fun goalTitle(): String {
                 backgroundColor = Color.White
             )
     )
-    return text.text
 }
 
 @Composable
-fun goalText(): String {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+fun goalText(
+    state: State,
+    listener: GoalsCreatorListener
+) {
     TextField(
-        value = text,
+        value = state.chosenGoal.description,
         onValueChange = {
-            text = it
+            listener.onChosenGoalChanged(
+                Goal(
+                    name = state.chosenGoal.name,
+                    description = it,
+                    checked = state.chosenGoal.checked
+                )
+            )
         },
         modifier = Modifier
             .fillMaxSize(),
@@ -133,13 +181,5 @@ fun goalText(): String {
                 backgroundColor = Color.White
             )
     )
-    return text.text
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewGoalCreator() {
-    MentalMeTheme {
-        GoalCreator()
-    }
-}

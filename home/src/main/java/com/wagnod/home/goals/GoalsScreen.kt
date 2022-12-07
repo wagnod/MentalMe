@@ -10,8 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +21,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.wagnod.core_ui.Navigator
 import com.wagnod.domain.Goal
-import com.wagnod.home.goals.GoalsContract.Event
+import com.wagnod.home.goals.GoalsContract.*
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -31,19 +29,42 @@ fun GoalsScreen(
     navigator: Navigator,
     viewModel: GoalsViewModel = getViewModel()
 ) {
+    val listener = object : GoalsListener {
+        override fun onCreateGoalButtonClicked() {
+            viewModel.setEvent(Event.OnCreateGoalButtonClicked)
+        }
+
+        override fun onIndexedGoalChanged(index: Int, goal: Goal) {
+            viewModel.setEvent(Event.OnIndexedGoalChanged(index, goal))
+        }
+    }
     LaunchedEffect(Unit) {
         viewModel.setEvent(Event.Init)
     }
 
     GoalsContent(
         state = viewModel.viewState.value,
+        listener = listener
     )
 
+    LaunchedEffect(true) {
+        viewModel.effect.collect { value ->
+            when (value) {
+                Effect.NavigateToGoalsCreator -> {
+                    navigator.homeNavigator.navigateToGoalCreator()
+                }
+                Effect.NavigateToGoalsScreen -> {
+                    navigator.homeNavigator.navigateToGoalsFromInner()
+                }
+            }
+        }
+    }
 }
 
 @Composable
 fun GoalsContent(
-    state: GoalsContract.State
+    state: State,
+    listener: GoalsListener
 ) = ConstraintLayout(
     modifier = Modifier.fillMaxSize()
 ) {
@@ -63,13 +84,13 @@ fun GoalsContent(
         end.linkTo(parent.end)
         bottom.linkTo(parent.bottom)
     }
-    GoalCards(cardsModifier, state)
+    GoalCards(cardsModifier, state, listener)
 
     val buttonModifier = Modifier.constrainAs(button) {
         end.linkTo(parent.end, 16.dp)
         bottom.linkTo(parent.bottom, 16.dp)
     }
-    AddGoalButton(buttonModifier)
+    AddGoalButton(buttonModifier, listener)
 }
 
 @Composable
@@ -95,19 +116,25 @@ fun TopAppBar(modifier: Modifier) = Row(
 @Composable
 fun GoalCards(
     modifier: Modifier,
-    state: GoalsContract.State
+    state: State,
+    listener: GoalsListener
 ) {
     LazyColumn(modifier = modifier) {
         itemsIndexed(state.goals) { index, item ->
             if (item.name.isNotEmpty() && item.description.isNotEmpty()) {
-                GoalCard(item, index + 1)
+                GoalCard(item, index + 1, state, listener)
             }
         }
     }
 }
 
 @Composable
-fun GoalCard(goal: Goal, index: Int) = ConstraintLayout(
+fun GoalCard(
+    goal: Goal,
+    index: Int,
+    state: State,
+    listener: GoalsListener
+) = ConstraintLayout(
     modifier = Modifier
         .fillMaxWidth()
         .clickable { }
@@ -115,7 +142,6 @@ fun GoalCard(goal: Goal, index: Int) = ConstraintLayout(
 
 ) {
     val (num, goalCard, checkbox) = createRefs()
-    val checkedState = remember { mutableStateOf(goal.checked) }
 
     Text(
         text = index.toString(),
@@ -153,7 +179,17 @@ fun GoalCard(goal: Goal, index: Int) = ConstraintLayout(
 
     Checkbox(
         checked = goal.checked,
-        onCheckedChange = { checkedState.value = it },
+        onCheckedChange = {
+            val curGoal = state.goals[index - 1]
+            listener.onIndexedGoalChanged(
+                index - 1,
+                Goal(
+                    name = curGoal.name,
+                    description = curGoal.description,
+                    checked = (!curGoal.checked)
+                )
+            )
+        },
         modifier = Modifier
             .padding(start = 16.dp)
             .constrainAs(checkbox) {
@@ -169,10 +205,10 @@ fun GoalCard(goal: Goal, index: Int) = ConstraintLayout(
 @Composable
 fun AddGoalButton(
     modifier: Modifier,
-    navigator: Navigator? = null
+    listener: GoalsListener
 ) {
     FloatingActionButton(
-        onClick = { navigator?.homeNavigator?.navigateToGoalCreator() },
+        onClick = { listener.onCreateGoalButtonClicked() },
         elevation = FloatingActionButtonDefaults.elevation(8.dp),
         modifier = modifier
     ) {

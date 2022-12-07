@@ -4,7 +4,7 @@ import com.wagnod.domain.FirebaseDatabaseRepository
 import com.wagnod.domain.Goal
 import com.wagnod.domain.UseCase
 
-class PutGoalsUseCase(
+class PutGoalsToDatabaseUseCase(
     private val repository: FirebaseDatabaseRepository
 ) : UseCase<List<Goal>, Boolean> {
 

@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.wagnod.core_ui.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
 import com.wagnod.login.ui.auth.AuthContract
+import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.AuthViewModel
 import com.wagnod.navigation.data.NavSections
 import org.koin.android.ext.android.inject
@@ -44,8 +45,8 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(true) {
                 viewModel.effect.collect { value ->
                     when (value) {
-                        AuthContract.Effect.NavigateToHome -> navigator.navigateToHomeAndClear()
-                        AuthContract.Effect.NavigateToLoginScreen -> navigator.navigateToLogin()
+                        Effect.NavigateToHome -> navigator.navigateToHomeAndClear()
+                        Effect.NavigateToLoginScreen -> navigator.navigateToLogin()
                     }
                 }
             }
