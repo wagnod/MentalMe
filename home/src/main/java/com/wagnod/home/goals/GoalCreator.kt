@@ -23,33 +23,40 @@ import com.wagnod.core_ui.Navigator
 import com.wagnod.domain.Goal
 import com.wagnod.home.R
 import com.wagnod.home.goals.GoalsContract.*
+import com.wagnod.home.goals.data.TextFieldType
+import com.wagnod.home.goals.data.TextFieldType.*
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun GoalCreator(
     navigator: Navigator,
+    chosenGoalIndex: Int?,
     viewModel: GoalsViewModel = getViewModel()
 ) {
-    LaunchedEffect(key1 = Unit) {
-        viewModel.setEvent(Event.Init)
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(Event.Init(chosenGoalIndex ?: -1))
     }
 
     val state = viewModel.viewState.value
     val listener = object : GoalsCreatorListener {
         override fun onSaveButtonClicked(goal: Goal) {
-            viewModel.setEvent(Event.OnSaveButtonClicked(goal))
+            viewModel.setEvent(Event.OnSaveButtonClicked(goal, chosenGoalIndex ?: -1))
         }
 
-        override fun onChosenGoalChanged(goal: Goal) {
-            viewModel.setEvent(Event.OnChosenGoalChanged(goal))
+        override fun onChosenGoalChanged(text: String, type: TextFieldType) {
+            viewModel.setEvent(Event.OnGoalEdited(text, type))
         }
     }
 
     LaunchedEffect(true) {
-        viewModel.effect.collect { value ->
-            when (value) {
-                Effect.NavigateToGoalsScreen -> navigator.homeNavigator.navigateToGoalsFromInner()
-                Effect.NavigateToGoalsCreator -> navigator.homeNavigator.navigateToGoalCreator()
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is Effect.NavigateToGoalsScreen -> {
+                    navigator.back()
+                }
+                is Effect.NavigateToGoalsCreator -> {
+                    navigator.homeNavigator.navigateToGoalCreator(effect.index)
+                }
             }
         }
     }
@@ -62,7 +69,9 @@ fun GoalCreatorContent(
     navigator: Navigator,
     listener: GoalsCreatorListener,
     state: State
-) = Column(Modifier.fillMaxSize()) {
+) = Column(
+    modifier = Modifier.fillMaxSize()
+) {
     ToolBar(navigator, listener, state)
     goalTitle(state, listener)
     goalText(state, listener)
@@ -94,7 +103,7 @@ fun ToolBar(
                     start.linkTo(parent.start)
                     end.linkTo(title.start)
                 }
-                .clickable { navigator.homeNavigator.navigateToGoalsFromInner() }
+                .clickable { navigator.back() }
         )
         Text(
             text = "Добавить цель",
@@ -138,22 +147,18 @@ fun goalTitle(
     TextField(
         value = state.chosenGoal.name,
         onValueChange = {
-            listener.onChosenGoalChanged(
-                Goal(
-                    name = it,
-                    description = state.chosenGoal.description,
-                    checked = state.chosenGoal.checked
-                )
-            )
+            listener.onChosenGoalChanged(it, GOAL_NAME)
         },
-        modifier = Modifier
-            .fillMaxWidth(),
-        label = { Text(text = "Заголовок") },
-        placeholder = { Text(text = "Введите название цели") },
-        colors = TextFieldDefaults
-            .textFieldColors(
-                backgroundColor = Color.White
-            )
+        modifier = Modifier.fillMaxWidth(),
+        label = {
+            Text(text = "Заголовок")
+        },
+        placeholder = {
+            Text(text = "Введите название цели")
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.White
+        )
     )
 }
 
@@ -165,21 +170,13 @@ fun goalText(
     TextField(
         value = state.chosenGoal.description,
         onValueChange = {
-            listener.onChosenGoalChanged(
-                Goal(
-                    name = state.chosenGoal.name,
-                    description = it,
-                    checked = state.chosenGoal.checked
-                )
-            )
+            listener.onChosenGoalChanged(it, GOAL_DESCRIPTION)
         },
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         placeholder = { Text(text = "Введите описание цели") },
-        colors = TextFieldDefaults
-            .textFieldColors(
-                backgroundColor = Color.White
-            )
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.White
+        )
     )
 }
 

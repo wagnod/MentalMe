@@ -6,6 +6,7 @@ import com.wagnod.domain.execute
 import com.wagnod.domain.home.usecase.GetUserInfoUseCase
 import com.wagnod.domain.home.usecase.PutGoalsToDatabaseUseCase
 import com.wagnod.home.goals.GoalsContract.*
+import com.wagnod.home.goals.data.TextFieldType
 import kotlinx.coroutines.launch
 
 class GoalsViewModel(
@@ -17,58 +18,77 @@ class GoalsViewModel(
 
     override fun handleEvents(event: Event) {
         when (event) {
-            is Event.Init -> loadGoals()
-            is Event.OnGoalsUpdated -> updateGoals()
-            is Event.OnCreateGoalButtonClicked -> createGoalButtonClicked()
-            is Event.OnSaveButtonClicked -> addNewGoal(event.goal)
-            is Event.OnChosenGoalChanged -> changeChosenGoal(event.goal)
-            is Event.OnIndexedGoalChanged -> onIndexedGoalChanged(event.index, event.goal)
+            is Event.Init -> loadGoalsFromDatabase(event.index)
+            is Event.OnCreateGoalButtonClicked -> navigateToGoalsCreator()
+            is Event.OnSaveButtonClicked -> saveGoal(event.goal, event.index)
+            is Event.OnGoalEdited -> editGoal(event.text, event.inputType)
+            is Event.OnCheckBoxClicked -> changeCheckBoxState(event.index, event.goal)
+            is Event.OnGoalCardClicked -> navigateToGoalsCreator(event.index)
         }
     }
 
-    private fun changeChosenGoal(goal: Goal) = setState {
-        copy(chosenGoal = goal)
+    private fun editGoal(text: String, type: TextFieldType) = setState {
+        copy(
+            chosenGoal = if (type == TextFieldType.GOAL_NAME) {
+                chosenGoal.copy(name = text)
+            } else {
+                chosenGoal.copy(description = text)
+            }
+        )
     }
 
-    private fun loadGoals() = launch {
+    private fun loadGoalsFromDatabase(index: Int) = launch {
         runCatching {
             getUserInfoUseCase
                 .execute()
-                .collect { data ->
-                    if (data != null) changeData(data.goals)
+                .collect { userInfo ->
+                    if (userInfo != null) {
+                        setGoals(userInfo.goals)
+                        if (index != -1) {
+                            setState {
+                                copy(chosenGoal = viewState.value.goals[index])
+                            }
+                        }
+                    }
                 }
         }
     }
 
-    private fun createGoalButtonClicked() = setEffect {
-        Effect.NavigateToGoalsCreator
+    private fun navigateToGoalsCreator(index: Int = -1) = setEffect {
+        Effect.NavigateToGoalsCreator(index)
     }
 
-    private fun changeData(goals: List<Goal>) = setState {
+    private fun setGoals(goals: List<Goal>) = setState {
         copy(goals = goals)
     }
 
-    private fun updateGoals() = launch {
+    private fun updateGoals(toNavigate: Boolean) = launch {
         runCatching {
             putGoalsToDatabaseUseCase.execute(viewState.value.goals)
         }.onSuccess {
-            navigateToGoalsScreen()
+            if (toNavigate) navigateToGoalsScreen()
         }
     }
 
-    private fun addNewGoal(goal: Goal) {
-        changeData(viewState.value.goals.toMutableList().also { it.add(goal) })
-        updateGoals()
+    private fun saveGoal(newGoal: Goal, editedGoalIndex: Int) {
+        val list = mutableListOf<Goal>().apply {
+            viewState.value.goals.forEachIndexed { index, goal ->
+                if (editedGoalIndex == index) add(newGoal) else add(goal)
+            }
+            if (editedGoalIndex == -1) add(newGoal)
+        }
+        setGoals(list)
+        updateGoals(true)
     }
 
     private fun navigateToGoalsScreen() = setEffect {
         Effect.NavigateToGoalsScreen
     }
 
-    private fun onIndexedGoalChanged(index: Int, goal: Goal) {
+    private fun changeCheckBoxState(index: Int, goal: Goal) {
         setState {
             copy(goals = viewState.value.goals.toMutableList().also { it[index] = goal })
         }
-        updateGoals()
+        updateGoals(false)
     }
 }

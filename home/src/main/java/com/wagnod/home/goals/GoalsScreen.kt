@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -35,11 +36,15 @@ fun GoalsScreen(
         }
 
         override fun onIndexedGoalChanged(index: Int, goal: Goal) {
-            viewModel.setEvent(Event.OnIndexedGoalChanged(index, goal))
+            viewModel.setEvent(Event.OnCheckBoxClicked(index, goal))
+        }
+
+        override fun onGoalCardClicked(index: Int) {
+            viewModel.setEvent(Event.OnGoalCardClicked(index))
         }
     }
     LaunchedEffect(Unit) {
-        viewModel.setEvent(Event.Init)
+        viewModel.setEvent(Event.Init(-1))
     }
 
     GoalsContent(
@@ -50,11 +55,11 @@ fun GoalsScreen(
     LaunchedEffect(true) {
         viewModel.effect.collect { value ->
             when (value) {
-                Effect.NavigateToGoalsCreator -> {
-                    navigator.homeNavigator.navigateToGoalCreator()
+                is Effect.NavigateToGoalsCreator -> {
+                    navigator.homeNavigator.navigateToGoalCreator(value.index)
                 }
                 Effect.NavigateToGoalsScreen -> {
-                    navigator.homeNavigator.navigateToGoalsFromInner()
+                    navigator.back()
                 }
             }
         }
@@ -137,9 +142,10 @@ fun GoalCard(
 ) = ConstraintLayout(
     modifier = Modifier
         .fillMaxWidth()
-        .clickable { }
+        .clickable {
+            listener.onGoalCardClicked(index - 1)
+        }
         .padding(vertical = 8.dp)
-
 ) {
     val (num, goalCard, checkbox) = createRefs()
 
@@ -173,7 +179,9 @@ fun GoalCard(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = goal.description,
-            style = MaterialTheme.typography.h1
+            style = MaterialTheme.typography.h1,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 2
         )
     }
 

@@ -1,16 +1,15 @@
 package com.wagnod.navigation.home
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation.*
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import com.wagnod.core_ui.Navigator
+import com.wagnod.core_ui.home.HomeNavigator
 import com.wagnod.home.HomeScreen
 import com.wagnod.home.diary.Diary
+import com.wagnod.home.goals.GoalCreator
 import com.wagnod.home.goals.GoalsScreen
 import com.wagnod.home.tracker.MoodTracker
-import com.wagnod.core_ui.home.HomeNavigator
-import com.wagnod.home.goals.GoalCreator
+import com.wagnod.navigation.data.Keys
 import com.wagnod.navigation.data.NavSections
 
 class HomeNavigatorImpl : HomeNavigator {
@@ -27,18 +26,19 @@ class HomeNavigatorImpl : HomeNavigator {
             composable(HomeNavRoutes.TRACKER.route) { MoodTracker() }
             composable(HomeNavRoutes.DIARY.route) { Diary() }
             composable(HomeNavRoutes.GOALS.route) { GoalsScreen(navigator) }
-            composable(HomeNavRoutes.CREATE_GOAL.route) { GoalCreator(navigator) }
+            composable(
+                route = HomeNavRoutes.CREATE_GOAL.route + "/{${Keys.goalIndexKey}}",
+                arguments = listOf(navArgument(Keys.goalIndexKey) {
+                    type = NavType.IntType
+                })
+            ) { backStackEntry ->
+                GoalCreator(navigator, backStackEntry.arguments?.getInt(Keys.goalIndexKey))
+            }
         }
     }
 
     override fun navigateToGoals() {
         mNavController.navigate(HomeNavRoutes.GOALS.route)
-    }
-
-    override fun navigateToGoalsFromInner() {
-        mNavController.navigate(HomeNavRoutes.GOALS.route) {
-            popUpTo(HomeNavRoutes.GOALS.route) {inclusive = true}
-        }
     }
 
     override fun navigateToDiary() {
@@ -49,10 +49,9 @@ class HomeNavigatorImpl : HomeNavigator {
         mNavController.navigate(HomeNavRoutes.TRACKER.route)
     }
 
-    override fun navigateToGoalCreator() {
-        mNavController.navigate(HomeNavRoutes.CREATE_GOAL.route)
+    override fun navigateToGoalCreator(goalIndex: Int) {
+        mNavController.navigate(HomeNavRoutes.CREATE_GOAL.route + "/${goalIndex}")
     }
-
 
 
     companion object {

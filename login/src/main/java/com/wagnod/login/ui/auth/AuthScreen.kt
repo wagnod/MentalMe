@@ -1,6 +1,8 @@
 package com.wagnod.login.ui.auth
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -91,22 +93,50 @@ fun AuthScreen(
 fun AuthScreenContent(
     state: State,
     listener: Listener?
+) = Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(Color.LightGray),
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.app_icon),
+            contentDescription = "",
+            modifier = Modifier
+                .padding(vertical = 50.dp)
+                .size(60.dp)
+        )
+    }
+    AuthScreenUserInput(state, listener)
+}
+
+@Composable
+fun AuthScreenUserInput(
+    state: State,
+    listener: Listener?
 ) = ConstraintLayout(
-    modifier = Modifier.fillMaxSize()
+    modifier = Modifier
+        .fillMaxSize()
+        .clip(RoundedCornerShape(10.dp))
+        .background(Color.White)
 ) {
     val (inputs, login) = createRefs()
 
     Column(
-        modifier = Modifier.constrainAs(inputs) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(parent.bottom)
-        },
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .constrainAs(inputs) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Title(state)
+        Spacer(modifier = Modifier.size(24.dp))
         TextFields(state = state, listener = listener, type = state.screenType)
         SignUpButton(state, listener)
     }
@@ -123,14 +153,28 @@ fun AuthScreenContent(
 private fun Title(
     state: State
 ) {
-    Text(
-        modifier = Modifier.padding(vertical = 10.dp),
-        text = when (state.screenType) {
-            SIGN_UP -> "Sign Up"
-            SIGN_IN -> "Login"
-        },
-        style = TextStyle(fontSize = 30.sp)
-    )
+    TabRow(
+        selectedTabIndex = 0,
+        backgroundColor = Color.White,
+        modifier = Modifier.size(120.dp, 50.dp)
+    ) {
+        Tab(
+            selected = true,
+            selectedContentColor = Color.DarkGray,
+            enabled = false,
+            onClick = {},
+            text = {
+                Text(
+                    text = when (state.screenType) {
+                        SIGN_UP -> "Sign Up"
+                        SIGN_IN -> "Sign in"
+                    },
+                    style = TextStyle(fontSize = 25.sp)
+                )
+            },
+        )
+    }
+
 }
 
 @Composable
@@ -219,7 +263,7 @@ private fun InputView(
             }
         ),
         trailingIcon = {
-            if (data.type == CONFIRM || data.type ==PASSWORD ) {
+            if (data.type == CONFIRM || data.type == PASSWORD) {
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
