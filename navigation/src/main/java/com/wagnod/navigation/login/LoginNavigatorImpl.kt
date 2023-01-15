@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.wagnod.core_ui.Navigator
-import com.wagnod.core_ui.login.LoginNavigator
+import com.wagnod.core_ui.navigators.main.Navigator
+import com.wagnod.core_ui.navigators.LoginNavigator
 import com.wagnod.login.ui.auth.AuthScreen
 import com.wagnod.navigation.data.LoginRoute
 

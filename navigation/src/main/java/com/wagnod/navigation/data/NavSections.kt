@@ -1,7 +1,7 @@
 package com.wagnod.navigation.data
 
 import androidx.annotation.StringRes
-import com.wagnod.core_ui.Navigator
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.navigation.R
 
 enum class NavSections(

@@ -1,11 +1,11 @@
 package com.wagnod.navigation.di
 
-import com.wagnod.core_ui.friends.FriendsNavigator
-import com.wagnod.core_ui.home.HomeNavigator
-import com.wagnod.core_ui.login.LoginNavigator
-import com.wagnod.core_ui.new_screen.NewNavigator
-import com.wagnod.core_ui.profile.ProfileNavigator
-import com.wagnod.core_ui.search.SearchNavigator
+import com.wagnod.core_ui.navigators.FriendsNavigator
+import com.wagnod.core_ui.navigators.HomeNavigator
+import com.wagnod.core_ui.navigators.LoginNavigator
+import com.wagnod.core_ui.navigators.NewNavigator
+import com.wagnod.core_ui.navigators.ProfileNavigator
+import com.wagnod.core_ui.navigators.SearchNavigator
 import com.wagnod.navigation.friends.FriendsNavigatorImpl
 import com.wagnod.navigation.home.HomeNavigatorImpl
 import com.wagnod.navigation.login.LoginNavigatorImpl

@@ -17,9 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.wagnod.core_ui.Navigator
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
-import com.wagnod.login.ui.auth.AuthContract
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.AuthViewModel
 import com.wagnod.navigation.data.NavSections

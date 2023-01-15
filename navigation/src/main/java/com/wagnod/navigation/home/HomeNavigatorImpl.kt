@@ -2,8 +2,8 @@ package com.wagnod.navigation.home
 
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.wagnod.core_ui.Navigator
-import com.wagnod.core_ui.home.HomeNavigator
+import com.wagnod.core_ui.navigators.main.Navigator
+import com.wagnod.core_ui.navigators.HomeNavigator
 import com.wagnod.home.HomeScreen
 import com.wagnod.home.diary.Diary
 import com.wagnod.home.goals.GoalCreator

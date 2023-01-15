@@ -1,6 +1,6 @@
 package com.wagnod.home.data
 
-import com.wagnod.core_ui.Navigator
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.home.R
 
 data class HomeCardData(

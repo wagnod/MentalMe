@@ -1,6 +1,6 @@
 package com.wagnod.profile.ui
 
-import com.wagnod.core_ui.base.ViewModelMapper
+import com.wagnod.core_ui.view_model.ViewModelMapper
 import com.wagnod.domain.UserInfo
 import com.wagnod.profile.data.User
 

@@ -1,8 +1,8 @@
 package com.wagnod.profile.ui
 
-import com.wagnod.core_ui.base.ViewEvent
-import com.wagnod.core_ui.base.ViewSideEffect
-import com.wagnod.core_ui.base.ViewState
+import com.wagnod.core_ui.view_model.ViewEvent
+import com.wagnod.core_ui.view_model.ViewSideEffect
+import com.wagnod.core_ui.view_model.ViewState
 import com.wagnod.profile.data.User
 
 interface ProfileContract {

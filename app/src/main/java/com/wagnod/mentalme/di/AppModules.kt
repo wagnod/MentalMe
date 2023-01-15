@@ -3,7 +3,7 @@ package com.wagnod.mentalme.di
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.wagnod.core_ui.Navigator
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.data.di.dataModule
 import com.wagnod.home.goals.di.goalsModule
 import com.wagnod.login.di.authModule

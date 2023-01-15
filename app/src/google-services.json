@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "299462134675",
+    "firebase_url": "https://mentalme-d9b0c-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mentalme-d9b0c",
+    "storage_bucket": "mentalme-d9b0c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299462134675:android:f071fdc3cbf479b189f666",
+        "android_client_info": {
+          "package_name": "com.wagnod.mentalme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299462134675-qv8tml3j6h95ig14cvk560uemsn4sl4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx3H8ltnJquyvg6TvJ84xs2akRAuOjFfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299462134675-qv8tml3j6h95ig14cvk560uemsn4sl4i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

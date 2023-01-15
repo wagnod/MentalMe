@@ -1,6 +1,6 @@
 package com.wagnod.home.goals
 
-import com.wagnod.core_ui.base.BaseViewModel
+import com.wagnod.core_ui.view_model.BaseViewModel
 import com.wagnod.domain.Goal
 import com.wagnod.domain.execute
 import com.wagnod.domain.home.usecase.GetUserInfoUseCase

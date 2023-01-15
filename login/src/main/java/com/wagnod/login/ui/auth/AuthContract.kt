@@ -1,8 +1,8 @@
 package com.wagnod.login.ui.auth
 
-import com.wagnod.core_ui.base.ViewEvent
-import com.wagnod.core_ui.base.ViewSideEffect
-import com.wagnod.core_ui.base.ViewState
+import com.wagnod.core_ui.view_model.ViewEvent
+import com.wagnod.core_ui.view_model.ViewSideEffect
+import com.wagnod.core_ui.view_model.ViewState
 import com.wagnod.login.ui.auth.data.ScreenType
 import com.wagnod.login.ui.auth.data.ScreenType.*
 import com.wagnod.login.ui.auth.data.TextFieldType

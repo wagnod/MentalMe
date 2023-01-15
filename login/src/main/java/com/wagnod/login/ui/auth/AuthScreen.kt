@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.wagnod.core_ui.Navigator
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.login.R
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.AuthContract.Effect.NavigateToHome

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import coil.compose.rememberAsyncImagePainter
+import com.skydoves.landscapist.coil.CoilImage
 import com.wagnod.profile.ui.ProfileContract.*
 import com.wagnod.profile.data.User
 import org.koin.androidx.compose.getViewModel
@@ -138,13 +138,12 @@ fun UserInfo(
 fun UserImage(
     modifier: Modifier,
     state: State
-) = Image(
-    painter = rememberAsyncImagePainter(state.user.profileImage),
-    contentDescription = "",
+) = CoilImage(
     modifier = modifier
         .padding(top = 16.dp)
         .size(75.dp)
-        .clip(CircleShape)
+        .clip(CircleShape),
+    imageModel = { state.user.profileImage }
 )
 
 @Composable

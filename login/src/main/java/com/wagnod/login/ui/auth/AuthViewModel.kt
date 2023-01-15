@@ -1,6 +1,6 @@
 package com.wagnod.login.ui.auth
 
-import com.wagnod.core_ui.base.BaseViewModel
+import com.wagnod.core_ui.view_model.BaseViewModel
 import com.wagnod.domain.execute
 import com.wagnod.domain.login.repository.AuthData
 import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
