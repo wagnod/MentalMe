@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.MentalMe" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/base_blue</item>
+        <item name="android:statusBarColor">@color/white</item>
     </style>
 
     <style name="SplashScreenTheme" parent="Theme.MentalMe">
