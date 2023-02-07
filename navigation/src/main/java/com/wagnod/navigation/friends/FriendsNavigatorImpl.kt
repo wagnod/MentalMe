@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.navigators.FriendsNavigator
-import com.wagnod.friends.Friends
+import com.wagnod.friends.FriendsScreenContent
 import com.wagnod.navigation.data.NavSections
 
 class FriendsNavigatorImpl: FriendsNavigator {
@@ -19,7 +19,7 @@ class FriendsNavigatorImpl: FriendsNavigator {
 
     override fun setGraph(navGraphBuilder: NavGraphBuilder, navigator: Navigator) {
         navGraphBuilder.navigation(NavSections.FRIENDS.route, rootRoute) {
-            composable(NavSections.FRIENDS.route) { Friends() }
+            composable(NavSections.FRIENDS.route) { FriendsScreenContent() }
         }
     }
 

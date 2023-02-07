@@ -1,38 +1,36 @@
 package com.wagnod.home.data
 
-import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.home.R
+import com.wagnod.home.data.HomeCardType.*
 
 data class HomeCardData(
     val icon: Int,
     val name: String,
     val text: String,
-    val onclick: () -> Unit
+    val type: HomeCardType
 )
 
-internal fun getCardsData(navigator: Navigator) = listOf(
+enum class HomeCardType {
+    TRACKER, DIARY, GOALS
+}
+
+internal fun getCardsData() = listOf(
     HomeCardData(
         icon = R.drawable.ic_smile,
         name = "Трекер настроения",
         text = "Отмечай настроение каждый день и следи, как оно меняется!",
-        onclick = {
-            navigator.homeNavigator.navigateToTracker()
-        }
+        type = TRACKER
     ),
     HomeCardData(
         icon = R.drawable.ic_diary,
         name = "Дневник",
         text = "Отвечай на вопросы и записывай свои мысли",
-        onclick = {
-            navigator.homeNavigator.navigateToDiary()
-        }
+        type = DIARY
     ),
     HomeCardData(
         icon = R.drawable.ic_goals,
         name = "Цели",
         text = "Строй цели и отмечай их выполнение",
-        onclick = {
-            navigator.homeNavigator.navigateToGoals()
-        }
+        type = GOALS
     )
 )

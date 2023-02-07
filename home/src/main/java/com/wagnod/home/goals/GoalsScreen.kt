@@ -16,11 +16,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.wagnod.core_ui.navigation.BackButton
+import com.wagnod.core_ui.navigation.NavBar
+import com.wagnod.core_ui.navigation.NavBarTitle
 import com.wagnod.core_ui.navigators.main.Navigator
+import com.wagnod.core_ui.theme.MentalMeTheme
 import com.wagnod.domain.Goal
 import com.wagnod.home.goals.GoalsContract.*
 import org.koin.androidx.compose.getViewModel
@@ -67,62 +72,43 @@ fun GoalsScreen(
 }
 
 @Composable
-fun GoalsContent(
+private fun GoalsContent(
     state: State,
-    listener: GoalsListener
-) = ConstraintLayout(
-    modifier = Modifier.fillMaxSize()
-) {
-    val (topBar, cards, button) = createRefs()
+    listener: GoalsListener?
+) = Column(modifier = Modifier.fillMaxSize()) {
 
-    val topModifier = Modifier.constrainAs(topBar) {
-        start.linkTo(parent.start)
-        top.linkTo(parent.top)
-        end.linkTo(parent.end)
-    }
-    TopAppBar(topModifier)
-
-    val cardsModifier = Modifier.constrainAs(cards) {
-        height = Dimension.fillToConstraints
-        top.linkTo(topBar.bottom)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
-        bottom.linkTo(parent.bottom)
-    }
-    GoalCards(cardsModifier, state, listener)
-
-    val buttonModifier = Modifier.constrainAs(button) {
-        end.linkTo(parent.end, 16.dp)
-        bottom.linkTo(parent.bottom, 16.dp)
-    }
-    AddGoalButton(buttonModifier, listener)
-}
-
-@Composable
-fun TopAppBar(modifier: Modifier) = Row(
-    modifier = modifier
-        .fillMaxWidth()
-        .background(MaterialTheme.colors.primary)
-        .height(56.dp),
-    horizontalArrangement = Arrangement.SpaceEvenly,
-    verticalAlignment = CenterVertically
-) {
-    Text(
-        text = "Цели",
-        style = TextStyle(
-            color = Color.White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium
-        )
+    NavBar(
+        title = { NavBarTitle(title = "Цели") },
+        navigationIcon = { BackButton {} }
     )
+
+    ConstraintLayout(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        val (cards, button) = createRefs()
+
+        val cardsModifier = Modifier.constrainAs(cards) {
+            height = Dimension.fillToConstraints
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            bottom.linkTo(parent.bottom)
+        }
+        GoalCards(cardsModifier, state, listener)
+
+        val buttonModifier = Modifier.constrainAs(button) {
+            end.linkTo(parent.end, 16.dp)
+            bottom.linkTo(parent.bottom, 16.dp)
+        }
+        AddGoalButton(buttonModifier, listener)
+    }
 }
 
-
 @Composable
-fun GoalCards(
+private fun GoalCards(
     modifier: Modifier,
     state: State,
-    listener: GoalsListener
+    listener: GoalsListener?
 ) {
     LazyColumn(modifier = modifier) {
         itemsIndexed(state.goals) { index, item ->
@@ -134,16 +120,16 @@ fun GoalCards(
 }
 
 @Composable
-fun GoalCard(
+private fun GoalCard(
     goal: Goal,
     index: Int,
     state: State,
-    listener: GoalsListener
+    listener: GoalsListener?
 ) = ConstraintLayout(
     modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            listener.onGoalCardClicked(index - 1)
+            listener?.onGoalCardClicked(index - 1)
         }
         .padding(vertical = 8.dp)
 ) {
@@ -189,7 +175,7 @@ fun GoalCard(
         checked = goal.checked,
         onCheckedChange = {
             val curGoal = state.goals[index - 1]
-            listener.onIndexedGoalChanged(
+            listener?.onIndexedGoalChanged(
                 index - 1,
                 Goal(
                     name = curGoal.name,
@@ -211,15 +197,22 @@ fun GoalCard(
 
 
 @Composable
-fun AddGoalButton(
+private fun AddGoalButton(
     modifier: Modifier,
-    listener: GoalsListener
+    listener: GoalsListener?
 ) {
     FloatingActionButton(
-        onClick = { listener.onCreateGoalButtonClicked() },
+        onClick = { listener?.onCreateGoalButtonClicked() },
         elevation = FloatingActionButtonDefaults.elevation(8.dp),
+        backgroundColor = MaterialTheme.colors.primaryVariant,
         modifier = modifier
     ) {
         Icon(Icons.Filled.Add, "")
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() = MentalMeTheme {
+    GoalsContent(state = State(), listener = null)
 }

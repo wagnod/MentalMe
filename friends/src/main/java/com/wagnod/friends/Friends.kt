@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,42 +21,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.wagnod.core_ui.navigation.NavBar
+import com.wagnod.core_ui.navigation.NavBarTitle
 import com.wagnod.core_ui.theme.MentalMeTheme
 
 @Composable
-fun Friends(
+fun FriendsScreenContent(
     friends: List<Friend> = sampleData
-) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.primary)
-                .height(56.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-
-        ) {
-            Text(
-                text = "Друзья",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            )
-        }
-        LazyColumn {
-            friends.map { item { FriendCard(it) } }
-        }
+) = Column(modifier = Modifier.fillMaxSize()) {
+    NavBar(title = { NavBarTitle(title = "Друзья") })
+    LazyColumn {
+        friends.map { item { FriendCard(it) } }
     }
-
 }
 
 data class Friend(val firstName: String, val lastName: String, val status: String)
 
 @Composable
-fun FriendCard(friend: Friend) {
+private fun FriendCard(friend: Friend) {
     ConstraintLayout(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -121,19 +102,18 @@ fun FriendCard(friend: Friend) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewFriends() {
-
+private fun PreviewFriends() {
     val sampleData = listOf(
         Friend("Varvara", "Symonovych", "Fill Depressed"),
         Friend("Varvara", "Symonovych", "Fill Depressed")
     )
     MentalMeTheme {
-        Friends(sampleData)
+        FriendsScreenContent(sampleData)
     }
 }
 
 
-val sampleData = listOf(
+private val sampleData = listOf(
     Friend("Varvara", "Symonovych", "Fill Depressed"),
     Friend("Varvara", "Symonovych", "Fill Depressed")
 )

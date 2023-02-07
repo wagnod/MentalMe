@@ -1,7 +1,5 @@
 package com.wagnod.profile.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.coil.CoilImage
+import com.wagnod.core_ui.navigation.NavBar
+import com.wagnod.core_ui.navigation.NavBarTitle
 import com.wagnod.profile.ui.ProfileContract.*
 import com.wagnod.profile.data.User
 import org.koin.androidx.compose.getViewModel
@@ -45,7 +45,6 @@ fun ProfileScreen(
         state = viewModel.viewState.value,
         listener = listener
     )
-
 }
 
 @Composable
@@ -55,45 +54,8 @@ fun ProfileScreenContent(
 ) = Column(
     modifier = Modifier.fillMaxSize()
 ) {
-    ToolBar()
+    NavBar(title = { NavBarTitle(title = "Профиль") })
     UserInfo(state, listener)
-}
-
-@Composable
-fun ToolBar() {
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
-            .height(56.dp)
-            .padding(horizontal = 16.dp),
-
-    ) {
-        val (title, options) = createRefs()
-        Column(
-            modifier = Modifier
-                .constrainAs(title) {
-                    width = Dimension.fillToConstraints
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(options.start)
-                }
-        ) {
-
-            Text(
-                text = "Профиль",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium
-                ),
-                modifier = Modifier
-                    .padding(start = 24.dp)
-                    .align(alignment = Alignment.CenterHorizontally),
-            )
-        }
-    }
 }
 
 @Composable

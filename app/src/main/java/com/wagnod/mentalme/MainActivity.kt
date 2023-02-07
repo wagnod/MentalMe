@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
 fun BottomBar(navigator: Navigator) {
     val currentRoute = navigator.currentRoute()
     BottomNavigation(
-        backgroundColor = MaterialTheme.colors.primary
+        backgroundColor = MaterialTheme.colors.background
     ) {
         NavSections.values().forEach { section ->
             BottomNavigationItem(
