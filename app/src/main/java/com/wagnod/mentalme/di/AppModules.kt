@@ -4,6 +4,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.wagnod.core_ui.navigators.main.Navigator
+import com.wagnod.dashboard.di.dashboardModule
 import com.wagnod.data.di.dataModule
 import com.wagnod.home.di.homeModule
 import com.wagnod.home.goals.di.goalsModule
@@ -30,5 +31,6 @@ val appModules = listOf(
     dataModule,
     profileModule,
     goalsModule,
-    homeModule
+    homeModule,
+    dashboardModule
 )

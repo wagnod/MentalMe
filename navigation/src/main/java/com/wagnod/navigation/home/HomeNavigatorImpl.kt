@@ -4,6 +4,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.navigators.HomeNavigator
+import com.wagnod.dashboard.ui.DashboardMainScreen
 import com.wagnod.home.HomeScreen
 import com.wagnod.home.diary.Diary
 import com.wagnod.home.goals.GoalCreator
@@ -22,7 +23,7 @@ class HomeNavigatorImpl : HomeNavigator {
 
     override fun setGraph(navGraphBuilder: NavGraphBuilder, navigator: Navigator) {
         navGraphBuilder.navigation(NavSections.HOME.route, rootRoute) {
-            composable(NavSections.HOME.route) { HomeScreen(navigator) }
+            composable(NavSections.HOME.route) { DashboardMainScreen(navigator) }
             composable(HomeNavRoutes.TRACKER.route) { MoodTracker() }
             composable(HomeNavRoutes.DIARY.route) { Diary() }
             composable(HomeNavRoutes.GOALS.route) { GoalsScreen(navigator) }
