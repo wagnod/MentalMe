@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscription_payment">Subscription &amp; payment</string>
+    <string name="profile_settings">Profile settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="password">Password</string>
+    <string name="feedback">App Feedback</string>
+    <string name="bug_report">Bug Report</string>
+
+</resources>

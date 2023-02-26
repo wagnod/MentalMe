@@ -6,9 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.wagnod.domain.execute
 import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 @SuppressLint("CustomSplashScreen")
@@ -22,13 +25,14 @@ class SplashActivity : ComponentActivity() {
             splashScreen.setKeepOnScreenCondition { true }
         }
         super.onCreate(savedInstanceState)
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                isUserAuthorized.execute()
 
-            isUserAuthorized.execute()
-
-            val intent = Intent(this@SplashActivity, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+                val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 }

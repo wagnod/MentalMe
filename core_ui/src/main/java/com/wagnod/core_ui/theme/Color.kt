@@ -40,3 +40,8 @@ val Colors.backgroundSecondary: Color
 @get:Composable
 val Colors.backgroundBrand: Color
     get() = primaryGraphics
+
+val shadowPrimary = Color(0xFFA3A5A4)
+@get:Composable
+val Colors.shadowsPrimary: Color
+    get() = shadowPrimary

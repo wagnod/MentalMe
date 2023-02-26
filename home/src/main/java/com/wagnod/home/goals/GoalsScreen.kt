@@ -1,6 +1,5 @@
 package com.wagnod.home.goals
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,9 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,7 +58,7 @@ fun GoalsScreen(
         viewModel.effect.collect { value ->
             when (value) {
                 is Effect.NavigateToGoalsCreator -> {
-                    navigator.homeNavigator.navigateToGoalCreator(value.index)
+                    navigator.dashboardNavigator.navigateToGoalCreator(value.index)
                 }
                 Effect.NavigateToGoalsScreen -> {
                     navigator.back()

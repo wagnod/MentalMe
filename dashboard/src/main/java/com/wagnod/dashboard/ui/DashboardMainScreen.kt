@@ -2,9 +2,8 @@ package com.wagnod.dashboard.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,21 +13,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.skydoves.landscapist.coil.CoilImage
+import com.wagnod.core_ui.EffectObserver
 import com.wagnod.core_ui.navigators.main.Navigator
-import com.wagnod.core_ui.theme.MentalMeTheme
-import com.wagnod.core_ui.theme.headline
-import com.wagnod.core_ui.theme.largeTitle
-import com.wagnod.core_ui.theme.textPrimary
+import com.wagnod.core_ui.theme.*
 import com.wagnod.dashboard.ui.DashboardContract.*
 import com.wagnod.domain.UserInfo
 import org.koin.androidx.compose.getViewModel
+import timber.log.Timber
 
 @Composable
 fun DashboardMainScreen(
@@ -48,9 +43,16 @@ fun DashboardMainScreen(
 
     }
 
-    LaunchedEffect(true) {
-        viewModel.effect.collect {
+    LaunchedEffect(Unit) {
+        Timber.tag("Zhopa").d("DashboardMainScreen")
+        viewModel.setEvent(Event.Init)
+    }
 
+
+    EffectObserver(viewModel.effect) {
+        when (it) {
+            is Effect.ShowFullArticle -> {}
+            is Effect.ShowBottomSheet -> {}
         }
     }
 
@@ -86,14 +88,11 @@ private fun Toolbar(
             state.user.userImage
         },
         modifier = Modifier
-            .size(32.dp)
-            .clip(CircleShape)
-            .clickable(
-                indication = null,
-                interactionSource = MutableInteractionSource()
-            ) {
+            .clickable {
                 listener?.onProfileClick(state.user)
             }
+            .size(40.dp)
+            .clip(RoundedCornerShape(4.dp))
     )
 }
 
@@ -114,13 +113,13 @@ private fun Section(
             .fillMaxWidth()
             .padding(start = 16.dp)
     )
-
-    Row(
+    Spacer(modifier = Modifier.padding(16.dp))
+    LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         state.articles.forEach {
-            SectionArticle(article = it, listener = listener)
+            item { SectionArticle(article = it, listener = listener) }
         }
     }
 }
@@ -134,11 +133,13 @@ fun SectionArticle(
 
     Column(
         modifier = Modifier
-            .padding(bottom = 12.dp)
+            .padding(start = 4.dp, end = 4.dp, bottom = 12.dp)
             .width(width)
             .shadow(
                 elevation = 4.dp,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(4.dp),
+                ambientColor = MaterialTheme.colors.shadowsPrimary,
+                spotColor = MaterialTheme.colors.shadowsPrimary
             )
             .clickable {
                 listener?.onArticleClick(article)

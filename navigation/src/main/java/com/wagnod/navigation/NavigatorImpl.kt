@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.navigators.FriendsNavigator
-import com.wagnod.core_ui.navigators.HomeNavigator
+import com.wagnod.core_ui.navigators.DashboardNavigator
 import com.wagnod.core_ui.navigators.LoginNavigator
 import com.wagnod.core_ui.navigators.NewNavigator
 import com.wagnod.core_ui.navigators.ProfileNavigator
@@ -16,7 +16,7 @@ import com.wagnod.navigation.data.NavSections
 import com.wagnod.navigation.login.LoginNavigatorImpl.Companion.rootRoute
 
 class NavigatorImpl(
-    override val homeNavigator: HomeNavigator,
+    override val dashboardNavigator: DashboardNavigator,
     override val searchNavigator: SearchNavigator,
     override val newNavigator: NewNavigator,
     override val friendsNavigator: FriendsNavigator,
@@ -27,7 +27,7 @@ class NavigatorImpl(
     private lateinit var mNavController: NavHostController
 
     private val navigators = listOf(
-        homeNavigator, searchNavigator, newNavigator, friendsNavigator, profileNavigator, loginNavigator
+        dashboardNavigator, searchNavigator, newNavigator, friendsNavigator, profileNavigator, loginNavigator
     )
 
     override fun setNavController(navController: NavHostController) {
@@ -54,8 +54,8 @@ class NavigatorImpl(
     }
 
     override fun navigateToHome() {
-        mNavController.navigate(NavSections.HOME.route) {
-            popUpTo(NavSections.HOME.route) {
+        mNavController.navigate(NavSections.DASHBOARD.route) {
+            popUpTo(NavSections.DASHBOARD.route) {
                 inclusive = true
             }
         }
@@ -82,7 +82,7 @@ class NavigatorImpl(
     }
 
     override fun navigateToHomeAndClear() {
-        mNavController.navigate(NavSections.HOME.route) {
+        mNavController.navigate(NavSections.DASHBOARD.route) {
             popUpTo(LoginRoute.route) {
                 inclusive = true
             }
@@ -93,7 +93,7 @@ class NavigatorImpl(
     override fun checkDestination() : Boolean {
         val entry = mNavController.currentBackStackEntryAsState()
         return when (entry.value?.destination?.route) {
-            NavSections.HOME.route,
+            NavSections.DASHBOARD.route,
             NavSections.SEARCH.route,
             NavSections.NEW.route,
             NavSections.FRIENDS.route,

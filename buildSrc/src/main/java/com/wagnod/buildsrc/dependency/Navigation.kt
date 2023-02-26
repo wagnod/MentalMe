@@ -8,6 +8,6 @@ object Navigation {
     const val COMMON = "androidx.navigation:navigation-common-ktx:$NAVIGATION"
 
     private object Version {
-        const val NAVIGATION = "2.6.0-alpha04"
+        const val NAVIGATION = "2.6.0-alpha05"
     }
 }

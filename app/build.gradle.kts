@@ -24,6 +24,10 @@ android {
         }
     }
 
+    configurations.implementation {
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk8")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -69,4 +73,5 @@ dependencies {
     accompanistDependencies()
     unitTestDependencies()
     firebaseDependencies()
+
 }

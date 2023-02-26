@@ -11,10 +11,10 @@ enum class NavSections(
     val value: Int,
     val tabNavigationCallback: (Navigator) -> Unit
 ) {
-    HOME(
+    DASHBOARD(
         title = R.string.nav_home,
         icon = R.drawable.ic_home,
-        route = "home",
+        route = "dashboard",
         value = 0,
         tabNavigationCallback = { navigator ->
             navigator.navigateToHome()

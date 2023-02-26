@@ -53,9 +53,9 @@ fun HomeScreen(
     LaunchedEffect(true) {
         viewModel.effect.collect {
             when (it) {
-                is Effect.NavigateToTracker -> navigator.homeNavigator.navigateToTracker()
-                is Effect.NavigateToDiary -> navigator.homeNavigator.navigateToDiary()
-                is Effect.NavigateToGoals -> navigator.homeNavigator.navigateToGoals()
+                is Effect.NavigateToTracker -> navigator.dashboardNavigator.navigateToTracker()
+                is Effect.NavigateToDiary -> navigator.dashboardNavigator.navigateToDiary()
+                is Effect.NavigateToGoals -> navigator.dashboardNavigator.navigateToGoals()
                 is Effect.ShowProfile -> {} //TODO
             }
         }

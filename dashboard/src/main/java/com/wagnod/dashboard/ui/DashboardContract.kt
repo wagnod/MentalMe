@@ -8,29 +8,20 @@ import com.wagnod.domain.UserInfo
 interface DashboardContract {
 
     interface Event : ViewEvent {
+        object Init : Event
         data class OnProfileClick(val user: UserInfo) : Event
         data class OnArticleClick(val article: Article) : Event
     }
 
     data class State(
         val user: UserInfo = UserInfo(),
-        val articles: List<Article> = listOf(
-            Article(
-                title = "Meditation",
-                image = "https://i0.wp.com/www.additudemag.com/wp-content/uploads/2022/04/Calming-Triggered-Emotions-Saunders_1920x1080.jpg",
-                description = "",
-                ArticleType.TEXT
-            ),
-            Article(
-                title = "Self therapy",
-                image = "https://i0.wp.com/www.additudemag.com/wp-content/uploads/2022/04/Calming-Triggered-Emotions-Saunders_1920x1080.jpg",
-                description = "",
-                ArticleType.AUDIO
-            )
-        )
+        val articles: List<Article> = listOf()
     ) : ViewState
 
-    interface Effect : ViewSideEffect
+    sealed interface Effect : ViewSideEffect {
+        data class ShowFullArticle(val article: Article) : Effect
+        data class ShowBottomSheet(val user: UserInfo) : Effect
+    }
 
     interface Listener {
         fun onProfileClick(user: UserInfo)

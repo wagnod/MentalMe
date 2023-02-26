@@ -3,9 +3,8 @@ package com.wagnod.navigation.home
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.wagnod.core_ui.navigators.main.Navigator
-import com.wagnod.core_ui.navigators.HomeNavigator
+import com.wagnod.core_ui.navigators.DashboardNavigator
 import com.wagnod.dashboard.ui.DashboardMainScreen
-import com.wagnod.home.HomeScreen
 import com.wagnod.home.diary.Diary
 import com.wagnod.home.goals.GoalCreator
 import com.wagnod.home.goals.GoalsScreen
@@ -13,7 +12,7 @@ import com.wagnod.home.tracker.MoodTracker
 import com.wagnod.navigation.data.Keys
 import com.wagnod.navigation.data.NavSections
 
-class HomeNavigatorImpl : HomeNavigator {
+class DashboardNavigatorImpl : DashboardNavigator {
 
     private lateinit var mNavController: NavController
 
@@ -22,13 +21,13 @@ class HomeNavigatorImpl : HomeNavigator {
     }
 
     override fun setGraph(navGraphBuilder: NavGraphBuilder, navigator: Navigator) {
-        navGraphBuilder.navigation(NavSections.HOME.route, rootRoute) {
-            composable(NavSections.HOME.route) { DashboardMainScreen(navigator) }
-            composable(HomeNavRoutes.TRACKER.route) { MoodTracker() }
-            composable(HomeNavRoutes.DIARY.route) { Diary() }
-            composable(HomeNavRoutes.GOALS.route) { GoalsScreen(navigator) }
+        navGraphBuilder.navigation(NavSections.DASHBOARD.route, rootRoute) {
+            composable(NavSections.DASHBOARD.route) { DashboardMainScreen(navigator) }
+            composable(DashboardNavRoutes.TRACKER.route) { MoodTracker() }
+            composable(DashboardNavRoutes.DIARY.route) { Diary() }
+            composable(DashboardNavRoutes.GOALS.route) { GoalsScreen(navigator) }
             composable(
-                route = HomeNavRoutes.CREATE_GOAL.route + "/{${Keys.goalIndexKey}}",
+                route = DashboardNavRoutes.CREATE_GOAL.route + "/{${Keys.goalIndexKey}}",
                 arguments = listOf(navArgument(Keys.goalIndexKey) {
                     type = NavType.IntType
                 })
@@ -39,24 +38,24 @@ class HomeNavigatorImpl : HomeNavigator {
     }
 
     override fun navigateToGoals() {
-        mNavController.navigate(HomeNavRoutes.GOALS.route)
+        mNavController.navigate(DashboardNavRoutes.GOALS.route)
     }
 
     override fun navigateToDiary() {
-        mNavController.navigate(HomeNavRoutes.DIARY.route)
+        mNavController.navigate(DashboardNavRoutes.DIARY.route)
     }
 
     override fun navigateToTracker() {
-        mNavController.navigate(HomeNavRoutes.TRACKER.route)
+        mNavController.navigate(DashboardNavRoutes.TRACKER.route)
     }
 
     override fun navigateToGoalCreator(goalIndex: Int) {
-        mNavController.navigate(HomeNavRoutes.CREATE_GOAL.route + "/${goalIndex}")
+        mNavController.navigate(DashboardNavRoutes.CREATE_GOAL.route + "/${goalIndex}")
     }
 
 
     companion object {
-        const val rootRoute = "home_root"
+        const val rootRoute = "dashboard_root"
     }
 
 }

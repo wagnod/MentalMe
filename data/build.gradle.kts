@@ -8,5 +8,4 @@ android {
 
 dependencies {
     implementation(project(mapOf("path" to ":domain")))
-    implementation(project(mapOf("path" to ":core_ui")))
 }
