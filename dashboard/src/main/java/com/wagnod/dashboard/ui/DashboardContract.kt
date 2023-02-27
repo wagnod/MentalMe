@@ -1,5 +1,8 @@
 package com.wagnod.dashboard.ui
 
+import com.wagnod.core_ui.sheet.data.BottomSheetParams
+import com.wagnod.core_ui.sheet.data.FeedbackSheetItems
+import com.wagnod.core_ui.sheet.data.GeneralSheetItems
 import com.wagnod.core_ui.view_model.ViewEvent
 import com.wagnod.core_ui.view_model.ViewSideEffect
 import com.wagnod.core_ui.view_model.ViewState
@@ -9,8 +12,10 @@ interface DashboardContract {
 
     interface Event : ViewEvent {
         object Init : Event
-        data class OnProfileClick(val user: UserInfo) : Event
+        data class ShowBottomSheet(val bottomSheetParams: BottomSheetParams) : Event
         data class OnArticleClick(val article: Article) : Event
+        data class OnGeneralSheetClick(val type: GeneralSheetItems): Event
+        data class OnFeedbackSheetClick(val type: FeedbackSheetItems): Event
     }
 
     data class State(

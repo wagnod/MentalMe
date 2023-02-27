@@ -1,47 +1,40 @@
 package com.wagnod.core_ui.sheet
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.skydoves.landscapist.coil.CoilImage
-import com.wagnod.core_ui.sheet.data.BottomSheetItem
-import com.wagnod.core_ui.sheet.data.SheetItem
-import com.wagnod.core_ui.theme.calloutRegular
-import com.wagnod.core_ui.theme.graphicsPrimary
-import com.wagnod.core_ui.theme.textPrimary
-
+import com.wagnod.core_ui.sheet.data.BottomSheetParams
+import com.wagnod.core_ui.theme.*
+import com.wagnod.core_ui.R
 
 @Composable
 fun SheetLayout(
-    currentSheet: List<Pair<BottomSheetItem, () -> Unit>>,
+    currentSheet: BottomSheetParams,
 ) {
-    LazyColumn {
-        item {
-            TopHideButton()
-        }
-        items(currentSheet.size) { position ->
-            SheetLayoutItem(currentSheet[position].first) {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    currentSheet[position].second.invoke()
-                }, 150)
-            }
-        }
-        item {
-            Spacer(modifier = Modifier.height(4.dp))
-        }
+    val maxHeight = LocalConfiguration.current.screenHeightDp.dp - currentSheet.topPadding
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = maxHeight)
+    ) {
+        TopHideButton()
+        currentSheet.content()
+        Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
@@ -63,8 +56,35 @@ private fun TopHideButton() = Row(
 }
 
 @Composable
-private fun SheetLayoutItem(
-    item: BottomSheetItem,
+fun UserInfoBottomSheet(
+    name: String,
+    image: String
+) = Column(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 16.dp, bottom = 12.dp),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = CenterHorizontally
+) {
+    CoilImage(
+        imageModel = { image },
+        modifier = Modifier
+            .size(100.dp)
+            .padding(bottom = 4.dp)
+            .clip(RoundedCornerShape(4.dp))
+    )
+    Text(
+        text = name,
+        style = MaterialTheme.typography.title1Bold,
+        color = MaterialTheme.colors.textPrimary
+    )
+}
+
+
+@Composable
+fun SheetButtonItem(
+    title: String,
+    icon: Int,
     onItemClick: () -> Unit
 ) = Box(
     modifier = Modifier.clickable { onItemClick() }
@@ -75,21 +95,37 @@ private fun SheetLayoutItem(
             .fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
-        val (title, icon) = when(item) {
-            is SheetItem -> item.title to item.icon
-            else -> throw IllegalStateException("Wrong BottomSheetItemType")
-        }
         CoilImage(
             modifier = Modifier
-                .clip(CircleShape)
+                .clip(RoundedCornerShape(4.dp))
                 .size(24.dp),
             imageModel = { icon },
         )
         Spacer(modifier = Modifier.width(20.dp))
         Text(
-            text = stringResource(title),
-            style = MaterialTheme.typography.calloutRegular,
+            text = title,
+            style = MaterialTheme.typography.calloutMedium,
             color = MaterialTheme.colors.textPrimary
         )
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = ""
+        )
     }
+}
+
+@Composable
+fun BottomSheetHeader(
+    header: String
+) = Column(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 4.dp, horizontal = 16.dp)
+) {
+    Text(
+        text = header,
+        style = MaterialTheme.typography.footnoteRegular,
+        color = MaterialTheme.colors.textColorSecondary
+    )
 }

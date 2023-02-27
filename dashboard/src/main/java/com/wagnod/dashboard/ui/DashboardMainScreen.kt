@@ -19,11 +19,15 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil.CoilImage
 import com.wagnod.core_ui.EffectObserver
 import com.wagnod.core_ui.navigators.main.Navigator
+import com.wagnod.core_ui.sheet.BottomSheetHeader
+import com.wagnod.core_ui.sheet.SheetButtonItem
+import com.wagnod.core_ui.sheet.UserInfoBottomSheet
+import com.wagnod.core_ui.sheet.data.BottomSheetParams
+import com.wagnod.core_ui.sheet.data.FeedbackSheetItems
+import com.wagnod.core_ui.sheet.data.GeneralSheetItems
 import com.wagnod.core_ui.theme.*
 import com.wagnod.dashboard.ui.DashboardContract.*
-import com.wagnod.domain.UserInfo
 import org.koin.androidx.compose.getViewModel
-import timber.log.Timber
 
 @Composable
 fun DashboardMainScreen(
@@ -32,15 +36,23 @@ fun DashboardMainScreen(
 ) {
     val state = viewModel.viewState.value
 
+    val params = BottomSheetParams(
+        content = BottomSheetContent(
+            name = state.user.name,
+            image = state.user.userImage,
+            onGenClick = { viewModel.setEvent(Event.OnGeneralSheetClick(it)) },
+            onFeedbackClick = { viewModel.setEvent(Event.OnFeedbackSheetClick(it)) }
+        )
+
+    )
     val listener = object : Listener {
         override fun onProfileClick() {
-            viewModel.setEvent(Event.OnProfileClick(state.user))
+            viewModel.setEvent(Event.ShowBottomSheet(params))
         }
 
         override fun onArticleClick(article: Article) {
             viewModel.setEvent(Event.OnArticleClick(article))
         }
-
     }
 
     LaunchedEffect(Unit) {
@@ -161,6 +173,27 @@ fun SectionArticle(
     }
 }
 
+@Composable
+fun BottomSheetContent(
+    name: String,
+    image: String,
+    onGenClick: (GeneralSheetItems) -> Unit,
+    onFeedbackClick: (FeedbackSheetItems) -> Unit,
+): @Composable () -> Unit = {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        UserInfoBottomSheet(name, image)
+        BottomSheetHeader("General")
+        GeneralSheetItems.values().forEach {
+            SheetButtonItem(it.title, it.icon) { onGenClick.invoke(it) }
+        }
+        BottomSheetHeader("Feedback")
+        FeedbackSheetItems.values().forEach {
+            SheetButtonItem(it.title, it.icon) { onFeedbackClick.invoke(it) }
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
