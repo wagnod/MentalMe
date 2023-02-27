@@ -6,7 +6,6 @@ import com.wagnod.data.AppDispatchers
 
 class BottomSheetItemsHelper(
     private val navigator: Navigator,
-    private val dispatchers: AppDispatchers,
 ) {
     private val subscriptionPayment = SubscriptionPayment() to { navigator.navigateToHome() }
     private val profileSettings =

@@ -9,7 +9,6 @@ import com.wagnod.domain.UserInfo
 import com.wagnod.domain.execute
 import com.wagnod.domain.home.usecase.GetUserInfoUseCase
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class DashboardViewModel(
     private val getUserInfoUseCase: GetUserInfoUseCase,
@@ -28,12 +27,10 @@ class DashboardViewModel(
 
     private fun init() = launch {
         runCatching {
-            Timber.tag("Zhopa").d("Dashboard init start")
             getUserInfoUseCase
                 .execute()
                 .collect { user ->
                     setState { copy(user = user ?: UserInfo()) }
-                    Timber.tag("Zhopa").d("user = ${user?.id}")
                 }
         }
     }

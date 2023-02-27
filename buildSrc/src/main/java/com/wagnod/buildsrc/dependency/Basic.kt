@@ -50,6 +50,6 @@ object Basic {
         const val JODA = "2.12.2"
         const val CUSTOM_TABS_VERSION = "1.4.0"
         const val DATE_TIME_VERSION = "0.9.0"
-        const val SPLASH_SCREEN_VERSION = "1.0.0-beta01"
+        const val SPLASH_SCREEN_VERSION = "1.0.0-alpha01"
     }
 }

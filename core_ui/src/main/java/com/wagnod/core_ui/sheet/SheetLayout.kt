@@ -27,7 +27,6 @@ import com.wagnod.core_ui.theme.textPrimary
 @Composable
 fun SheetLayout(
     currentSheet: List<Pair<BottomSheetItem, () -> Unit>>,
-//    closeCallback: () -> Unit
 ) {
     LazyColumn {
         item {
@@ -35,7 +34,6 @@ fun SheetLayout(
         }
         items(currentSheet.size) { position ->
             SheetLayoutItem(currentSheet[position].first) {
-//                closeCallback.invoke()
                 Handler(Looper.getMainLooper()).postDelayed({
                     currentSheet[position].second.invoke()
                 }, 150)

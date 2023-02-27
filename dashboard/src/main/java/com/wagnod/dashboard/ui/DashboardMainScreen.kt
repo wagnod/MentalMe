@@ -33,8 +33,8 @@ fun DashboardMainScreen(
     val state = viewModel.viewState.value
 
     val listener = object : Listener {
-        override fun onProfileClick(user: UserInfo) {
-            viewModel.setEvent(Event.OnProfileClick(user))
+        override fun onProfileClick() {
+            viewModel.setEvent(Event.OnProfileClick(state.user))
         }
 
         override fun onArticleClick(article: Article) {
@@ -44,7 +44,6 @@ fun DashboardMainScreen(
     }
 
     LaunchedEffect(Unit) {
-        Timber.tag("Zhopa").d("DashboardMainScreen")
         viewModel.setEvent(Event.Init)
     }
 
@@ -52,7 +51,6 @@ fun DashboardMainScreen(
     EffectObserver(viewModel.effect) {
         when (it) {
             is Effect.ShowFullArticle -> {}
-            is Effect.ShowBottomSheet -> {}
         }
     }
 
@@ -89,7 +87,7 @@ private fun Toolbar(
         },
         modifier = Modifier
             .clickable {
-                listener?.onProfileClick(state.user)
+                listener?.onProfileClick()
             }
             .size(40.dp)
             .clip(RoundedCornerShape(4.dp))

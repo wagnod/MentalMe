@@ -20,11 +20,10 @@ interface DashboardContract {
 
     sealed interface Effect : ViewSideEffect {
         data class ShowFullArticle(val article: Article) : Effect
-        data class ShowBottomSheet(val user: UserInfo) : Effect
     }
 
     interface Listener {
-        fun onProfileClick(user: UserInfo)
+        fun onProfileClick()
         fun onArticleClick(article: Article)
     }
 }

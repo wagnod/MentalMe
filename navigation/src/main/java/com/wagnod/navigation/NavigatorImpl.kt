@@ -4,13 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.wagnod.core_ui.navigators.*
 import com.wagnod.core_ui.navigators.main.Navigator
-import com.wagnod.core_ui.navigators.FriendsNavigator
-import com.wagnod.core_ui.navigators.DashboardNavigator
-import com.wagnod.core_ui.navigators.LoginNavigator
-import com.wagnod.core_ui.navigators.NewNavigator
-import com.wagnod.core_ui.navigators.ProfileNavigator
-import com.wagnod.core_ui.navigators.SearchNavigator
 import com.wagnod.navigation.data.LoginRoute
 import com.wagnod.navigation.data.NavSections
 import com.wagnod.navigation.login.LoginNavigatorImpl.Companion.rootRoute
@@ -27,7 +22,12 @@ class NavigatorImpl(
     private lateinit var mNavController: NavHostController
 
     private val navigators = listOf(
-        dashboardNavigator, searchNavigator, newNavigator, friendsNavigator, profileNavigator, loginNavigator
+        dashboardNavigator,
+        searchNavigator,
+        newNavigator,
+        friendsNavigator,
+        profileNavigator,
+        loginNavigator
     )
 
     override fun setNavController(navController: NavHostController) {
@@ -90,7 +90,7 @@ class NavigatorImpl(
     }
 
     @Composable
-    override fun checkDestination() : Boolean {
+    override fun checkDestination(): Boolean {
         val entry = mNavController.currentBackStackEntryAsState()
         return when (entry.value?.destination?.route) {
             NavSections.DASHBOARD.route,
@@ -103,6 +103,6 @@ class NavigatorImpl(
     }
 
     @Composable
-    override fun currentRoute() : String? =
+    override fun currentRoute(): String? =
         mNavController.currentBackStackEntryAsState().value?.destination?.route
 }

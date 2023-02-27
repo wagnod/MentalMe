@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val coreUIModule = module {
     single { ShowBottomSheetHelper() }
-    factory { BottomSheetItemsHelper(get(), get()) }
+    single { BottomSheetItemsHelper(get()) }
 }
