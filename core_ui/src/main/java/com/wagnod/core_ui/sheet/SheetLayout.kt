@@ -3,7 +3,6 @@ package com.wagnod.core_ui.sheet
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -16,11 +15,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.skydoves.landscapist.coil.CoilImage
+import com.wagnod.core_ui.R
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
 import com.wagnod.core_ui.theme.*
-import com.wagnod.core_ui.R
 
 @Composable
 fun SheetLayout(
@@ -70,9 +68,9 @@ fun UserInfoBottomSheet(
         imageModel = { image },
         modifier = Modifier
             .size(100.dp)
-            .padding(bottom = 4.dp)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(8.dp))
     )
+    Spacer(modifier = Modifier.height(4.dp))
     Text(
         text = name,
         style = MaterialTheme.typography.title1Bold,

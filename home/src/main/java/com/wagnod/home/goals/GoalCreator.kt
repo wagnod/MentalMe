@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.wagnod.core_ui.navigators.main.Navigator
-import com.wagnod.domain.Goal
+import com.wagnod.core.datastore.user.Goal
 import com.wagnod.home.R
 import com.wagnod.home.goals.GoalsContract.*
 import com.wagnod.home.goals.data.TextFieldType

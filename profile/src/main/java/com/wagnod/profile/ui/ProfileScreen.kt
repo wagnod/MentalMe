@@ -74,7 +74,7 @@ fun UserInfo(
             width = Dimension.fillToConstraints
             top.linkTo(parent.top)
             start.linkTo(parent.start)
-            bottom.linkTo(card.top)
+            bottom.linkTo(card.top, 16.dp)
         }
 
         val cardModifier = Modifier.constrainAs(card) {
@@ -102,7 +102,6 @@ fun UserImage(
     state: State
 ) = CoilImage(
     modifier = modifier
-        .padding(top = 16.dp)
         .size(75.dp)
         .clip(CircleShape),
     imageModel = { state.user.profileImage }

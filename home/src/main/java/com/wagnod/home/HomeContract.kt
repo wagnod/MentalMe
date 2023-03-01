@@ -1,9 +1,9 @@
 package com.wagnod.home
 
+import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core_ui.view_model.ViewEvent
 import com.wagnod.core_ui.view_model.ViewSideEffect
 import com.wagnod.core_ui.view_model.ViewState
-import com.wagnod.domain.UserInfo
 import com.wagnod.home.data.HomeCardType
 
 interface HomeContract {

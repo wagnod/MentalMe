@@ -5,9 +5,9 @@ import com.wagnod.core_ui.sheet.data.BottomSheetParams
 import com.wagnod.core_ui.view_model.BaseViewModel
 import com.wagnod.dashboard.ui.DashboardContract.*
 import com.wagnod.dashboard.ui.DashboardContract.Event.*
-import com.wagnod.domain.UserInfo
+import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.domain.execute
-import com.wagnod.domain.home.usecase.GetUserInfoUseCase
+import com.wagnod.domain.dashboard.usecase.GetUserInfoUseCase
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(

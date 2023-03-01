@@ -2,7 +2,7 @@ package com.wagnod.profile.ui
 
 import com.wagnod.core_ui.view_model.BaseViewModel
 import com.wagnod.domain.execute
-import com.wagnod.domain.home.usecase.GetUserInfoUseCase
+import com.wagnod.domain.dashboard.usecase.GetUserInfoUseCase
 import com.wagnod.profile.data.User
 import com.wagnod.profile.ui.ProfileContract.*
 import kotlinx.coroutines.launch

@@ -3,11 +3,11 @@ package com.wagnod.data.login
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
+import com.wagnod.core.datastore.user.UserInfo
+import com.wagnod.core.datastore.user.toMap
 import com.wagnod.data.AppDispatchers
-import com.wagnod.domain.UserInfo
 import com.wagnod.domain.login.repository.AuthData
 import com.wagnod.domain.login.repository.FirebaseRepository
-import com.wagnod.domain.toMap
 import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.withContext
 

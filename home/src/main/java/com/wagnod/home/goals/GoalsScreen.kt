@@ -23,7 +23,7 @@ import com.wagnod.core_ui.navigation.NavBar
 import com.wagnod.core_ui.navigation.NavBarTitle
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
-import com.wagnod.domain.Goal
+import com.wagnod.core.datastore.user.Goal
 import com.wagnod.home.goals.GoalsContract.*
 import org.koin.androidx.compose.getViewModel
 

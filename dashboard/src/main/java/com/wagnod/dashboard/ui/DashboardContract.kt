@@ -1,12 +1,12 @@
 package com.wagnod.dashboard.ui
 
+import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
 import com.wagnod.core_ui.sheet.data.FeedbackSheetItems
 import com.wagnod.core_ui.sheet.data.GeneralSheetItems
 import com.wagnod.core_ui.view_model.ViewEvent
 import com.wagnod.core_ui.view_model.ViewSideEffect
 import com.wagnod.core_ui.view_model.ViewState
-import com.wagnod.domain.UserInfo
 
 interface DashboardContract {
 

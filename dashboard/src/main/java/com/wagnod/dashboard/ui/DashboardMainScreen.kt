@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil.CoilImage
@@ -28,6 +31,7 @@ import com.wagnod.core_ui.sheet.data.GeneralSheetItems
 import com.wagnod.core_ui.theme.*
 import com.wagnod.dashboard.ui.DashboardContract.*
 import org.koin.androidx.compose.getViewModel
+import com.wagnod.core_ui.R
 
 @Composable
 fun DashboardMainScreen(
@@ -91,7 +95,7 @@ private fun Toolbar(
     modifier = Modifier
         .fillMaxWidth()
         .height(56.dp)
-        .padding(start = 16.dp)
+        .padding(start = 24.dp)
 ) {
     CoilImage(
         imageModel = {
@@ -104,6 +108,19 @@ private fun Toolbar(
             .size(40.dp)
             .clip(RoundedCornerShape(4.dp))
     )
+    Spacer(modifier = Modifier.weight(1f))
+    IconButton(
+        modifier = Modifier
+            .size(40.dp)
+            .padding(end = 16.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        onClick = {}
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_search),
+            contentDescription = ""
+        )
+    }
 }
 
 @Composable

@@ -3,7 +3,7 @@ package com.wagnod.home.goals
 import com.wagnod.core_ui.view_model.ViewEvent
 import com.wagnod.core_ui.view_model.ViewSideEffect
 import com.wagnod.core_ui.view_model.ViewState
-import com.wagnod.domain.Goal
+import com.wagnod.core.datastore.user.Goal
 import com.wagnod.home.goals.data.TextFieldType
 
 interface GoalsContract {

@@ -1,10 +1,10 @@
 package com.wagnod.home.goals
 
 import com.wagnod.core_ui.view_model.BaseViewModel
-import com.wagnod.domain.Goal
+import com.wagnod.core.datastore.user.Goal
 import com.wagnod.domain.execute
-import com.wagnod.domain.home.usecase.GetUserInfoUseCase
-import com.wagnod.domain.home.usecase.PutGoalsToDatabaseUseCase
+import com.wagnod.domain.dashboard.usecase.GetUserInfoUseCase
+import com.wagnod.domain.dashboard.usecase.PutGoalsToDatabaseUseCase
 import com.wagnod.home.goals.GoalsContract.*
 import com.wagnod.home.goals.data.TextFieldType
 import kotlinx.coroutines.launch

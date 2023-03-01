@@ -1,4 +1,4 @@
-package com.wagnod.domain
+package com.wagnod.core.datastore.user
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

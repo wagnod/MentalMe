@@ -1,8 +1,8 @@
-package com.wagnod.domain.home.usecase
+package com.wagnod.domain.dashboard.usecase
 
-import com.wagnod.domain.FirebaseDatabaseRepository
+import com.wagnod.core.datastore.user.UserInfo
+import com.wagnod.domain.firebase.FirebaseDatabaseRepository
 import com.wagnod.domain.UseCase
-import com.wagnod.domain.UserInfo
 import kotlinx.coroutines.flow.Flow
 
 class GetUserInfoUseCase(

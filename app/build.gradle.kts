@@ -66,6 +66,10 @@ dependencies {
     implementation(project(mapOf("path" to ":data")))
     implementation(project(mapOf("path" to ":home")))
     implementation(project(mapOf("path" to ":dashboard")))
+    implementation(project(mapOf("path" to ":search")))
+    implementation(project(mapOf("path" to ":core")))
+    implementation(project(mapOf("path" to ":friends")))
+    implementation(project(mapOf("path" to ":new_screen")))
 
     koinDependencies()
     navigationDependencies()

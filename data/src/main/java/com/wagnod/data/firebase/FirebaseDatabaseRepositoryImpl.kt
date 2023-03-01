@@ -1,4 +1,4 @@
-package com.wagnod.data
+package com.wagnod.data.firebase
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
@@ -6,9 +6,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.wagnod.domain.FirebaseDatabaseRepository
-import com.wagnod.domain.Goal
-import com.wagnod.domain.UserInfo
+import com.wagnod.data.AppDispatchers
+import com.wagnod.domain.firebase.FirebaseDatabaseRepository
+import com.wagnod.core.datastore.user.Goal
+import com.wagnod.core.datastore.user.UserInfo
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow

@@ -1,5 +1,7 @@
-package com.wagnod.domain
+package com.wagnod.domain.firebase
 
+import com.wagnod.core.datastore.user.Goal
+import com.wagnod.core.datastore.user.UserInfo
 import kotlinx.coroutines.flow.Flow
 
 interface FirebaseDatabaseRepository {
