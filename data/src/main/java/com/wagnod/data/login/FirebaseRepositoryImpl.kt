@@ -5,7 +5,7 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core.datastore.user.toMap
-import com.wagnod.data.AppDispatchers
+import com.wagnod.domain.AppDispatchers
 import com.wagnod.domain.login.repository.AuthData
 import com.wagnod.domain.login.repository.FirebaseRepository
 import kotlinx.coroutines.tasks.asDeferred

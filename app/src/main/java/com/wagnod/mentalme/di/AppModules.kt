@@ -7,6 +7,7 @@ import com.wagnod.core_ui.di.coreUIModule
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.dashboard.di.dashboardModule
 import com.wagnod.data.di.dataModule
+import com.wagnod.domain.di.domainModule
 import com.wagnod.home.di.homeModule
 import com.wagnod.home.goals.di.goalsModule
 import com.wagnod.login.di.authModule
@@ -34,5 +35,6 @@ val appModules = listOf(
     goalsModule,
     homeModule,
     dashboardModule,
-    coreUIModule
+    coreUIModule,
+    domainModule
 )

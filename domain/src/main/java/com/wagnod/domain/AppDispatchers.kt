@@ -1,4 +1,4 @@
-package com.wagnod.data
+package com.wagnod.domain
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

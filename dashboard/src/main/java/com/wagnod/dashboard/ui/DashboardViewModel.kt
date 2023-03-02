@@ -6,6 +6,7 @@ import com.wagnod.core_ui.view_model.BaseViewModel
 import com.wagnod.dashboard.ui.DashboardContract.*
 import com.wagnod.dashboard.ui.DashboardContract.Event.*
 import com.wagnod.core.datastore.user.UserInfo
+import com.wagnod.domain.dashboard.usecase.GetTodaySelectionUseCase
 import com.wagnod.domain.execute
 import com.wagnod.domain.dashboard.usecase.GetUserInfoUseCase
 import kotlinx.coroutines.launch
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 class DashboardViewModel(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val showBottomSheetHelper: ShowBottomSheetHelper,
+    private val getTodaySelectionUseCase: GetTodaySelectionUseCase,
 ) : BaseViewModel<Event, State, Effect>() {
     override fun setInitialState() = State()
 
@@ -26,13 +28,23 @@ class DashboardViewModel(
         }
     }
 
-    private fun init() = launch {
+    private fun init() = io {
         runCatching {
-            getUserInfoUseCase
-                .execute()
-                .collect { user ->
-                    setState { copy(user = user ?: UserInfo()) }
-                }
+            getUser()
+            getTodaySelection()
+        }
+    }
+
+    private fun getUser() = launch {
+        getUserInfoUseCase.execute().collect { user ->
+            setState { copy(user = user ?: UserInfo()) }
+        }
+    }
+
+    private fun getTodaySelection() = launch {
+        val res = getTodaySelectionUseCase.execute()
+        res.collect { selection ->
+            setState { copy(articles = selection) }
         }
     }
 

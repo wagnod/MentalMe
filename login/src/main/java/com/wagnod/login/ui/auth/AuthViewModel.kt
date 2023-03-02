@@ -1,6 +1,7 @@
 package com.wagnod.login.ui.auth
 
 import com.wagnod.core_ui.view_model.BaseViewModel
+import com.wagnod.domain.app.InitAppDataUseCase
 import com.wagnod.domain.execute
 import com.wagnod.domain.login.repository.AuthData
 import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
@@ -17,11 +18,15 @@ import kotlinx.coroutines.launch
 class AuthViewModel(
     private val signUpUseCase: SignUpUseCase,
     private val signInUseCase: SignInUseCase,
-    private val checkIsUserAuthorizedUseCase: CheckIsUserAuthorizedUseCase
+    private val checkIsUserAuthorizedUseCase: CheckIsUserAuthorizedUseCase,
+    private val initAppDataUseCase: InitAppDataUseCase
 ) : BaseViewModel<Event, State, Effect>() {
 
     init {
         if (checkIsUserAuthorizedUseCase.isUserAuthorized()) {
+            io {
+                initAppDataUseCase.execute()
+            }
             setEffect { Effect.NavigateToHome }
         }
     }
@@ -40,15 +45,19 @@ class AuthViewModel(
 
     private fun auth() {
         setState { copy(buttonEnabled = false) }
-        launch {
-            val data = AuthData(
-                email = viewState.value.email,
-                password = viewState.value.password,
-                name = viewState.value.name
-            )
-            when (viewState.value.screenType) {
-                SIGN_IN -> signIn(data)
-                SIGN_UP -> signUp(data)
+        io {
+            runCatching {
+                val data = AuthData(
+                    email = viewState.value.email,
+                    password = viewState.value.password,
+                    name = viewState.value.name
+                )
+                when (viewState.value.screenType) {
+                    SIGN_IN -> signIn(data)
+                    SIGN_UP -> signUp(data)
+                }
+            }.onSuccess {
+                initAppDataUseCase.execute()
             }
         }
     }

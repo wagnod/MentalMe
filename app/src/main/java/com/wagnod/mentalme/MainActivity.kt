@@ -18,22 +18,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.sheet.SheetLayout
 import com.wagnod.core_ui.sheet.ShowBottomSheetHelper
 import com.wagnod.core_ui.theme.MentalMeTheme
+import com.wagnod.domain.app.InitAppDataUseCase
 import com.wagnod.domain.execute
 import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
 import com.wagnod.login.ui.auth.AuthContract.*
 import com.wagnod.login.ui.auth.AuthViewModel
 import com.wagnod.navigation.data.NavSections
-import com.wagnod.navigation.login.LoginNavigatorImpl
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.wagnod.navigation.login.LoginNavigatorImpl.Companion.rootRoute
 
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +40,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel by viewModel<AuthViewModel>()
     private val showBottomSheetHelper by inject<ShowBottomSheetHelper>()
     private val isUserAuthorized by inject<CheckIsUserAuthorizedUseCase>()
+    private val initAppDataUseCase by inject<InitAppDataUseCase>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +101,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        initAppDataUseCase.clearSubscribed()
     }
 }
 

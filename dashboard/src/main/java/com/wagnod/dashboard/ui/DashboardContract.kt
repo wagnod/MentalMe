@@ -1,5 +1,6 @@
 package com.wagnod.dashboard.ui
 
+import com.wagnod.core.datastore.articles.Article
 import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
 import com.wagnod.core_ui.sheet.data.FeedbackSheetItems

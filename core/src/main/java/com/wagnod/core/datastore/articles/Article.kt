@@ -1,6 +1,14 @@
 package com.wagnod.core.datastore.articles
 
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class Article(
@@ -54,8 +62,40 @@ data class Article(
     }
 }
 
-@Serializable
+@OptIn(ExperimentalSerializationApi::class)
+@Serializable(with = ArticleType.ArticleTypeSerializer::class)
 enum class ArticleType(val type: String) {
     TEXT("text"),
-    AUDIO("audio")
+    AUDIO("audio"),
+    UNKNOWN("");
+
+    companion object {
+        fun getType(type: String): ArticleType {
+            for (value in values()) {
+                if (value.type == type) {
+                    return value
+                }
+            }
+            return UNKNOWN
+        }
+    }
+
+    @Serializer(forClass = ArticleType::class)
+    object ArticleTypeSerializer : KSerializer<ArticleType> {
+        override val descriptor: SerialDescriptor =
+            PrimitiveSerialDescriptor(ArticleType::class.java.name, PrimitiveKind.STRING)
+
+        override fun serialize(encoder: Encoder, value: ArticleType) {
+            encoder.encodeString(value.type)
+        }
+
+        override fun deserialize(decoder: Decoder): ArticleType {
+            return try {
+                val key = decoder.decodeString()
+                getType(key)
+            } catch (e: IllegalArgumentException) {
+                UNKNOWN
+            }
+        }
+    }
 }

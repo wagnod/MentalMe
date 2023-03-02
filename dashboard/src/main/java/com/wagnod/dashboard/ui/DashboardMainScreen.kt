@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil.CoilImage
+import com.wagnod.core.datastore.articles.Article
 import com.wagnod.core_ui.EffectObserver
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.sheet.BottomSheetHeader
@@ -32,6 +33,7 @@ import com.wagnod.core_ui.theme.*
 import com.wagnod.dashboard.ui.DashboardContract.*
 import org.koin.androidx.compose.getViewModel
 import com.wagnod.core_ui.R
+import timber.log.Timber
 
 @Composable
 fun DashboardMainScreen(
@@ -216,15 +218,4 @@ fun BottomSheetContent(
 @Composable
 private fun Preview() = MentalMeTheme {
     DashboardScreenContent(state = State(), listener = null)
-}
-
-data class Article(
-    val title: String,
-    val image: String,
-    val description: String,
-    val type: ArticleType
-)
-
-enum class ArticleType {
-    TEXT, AUDIO
 }

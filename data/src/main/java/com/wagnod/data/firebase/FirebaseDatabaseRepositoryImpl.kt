@@ -6,10 +6,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.wagnod.data.AppDispatchers
-import com.wagnod.domain.firebase.FirebaseDatabaseRepository
 import com.wagnod.core.datastore.user.Goal
 import com.wagnod.core.datastore.user.UserInfo
+import com.wagnod.domain.AppDispatchers
+import com.wagnod.domain.firebase.FirebaseDatabaseRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.callbackFlow
@@ -31,7 +31,7 @@ class FirebaseDatabaseRepositoryImpl(
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("Zhopa", "getUserData ${error.message}")
+                Log.e("getUserData", error.message)
             }
         }
 

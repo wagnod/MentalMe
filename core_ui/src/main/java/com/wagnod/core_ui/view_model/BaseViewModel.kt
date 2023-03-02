@@ -5,13 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 // то, что ты видишь на экране (данные с экрана)
@@ -72,5 +69,9 @@ abstract class BaseViewModel<Event : ViewEvent, UiState : ViewState, Effect : Vi
         viewModelScope.launch {
             _effect.send(effectValue)
         }
+    }
+
+    protected fun ViewModel.io(block: suspend () -> Unit): Job {
+        return viewModelScope.launch(Dispatchers.Main) { block() }
     }
 }
