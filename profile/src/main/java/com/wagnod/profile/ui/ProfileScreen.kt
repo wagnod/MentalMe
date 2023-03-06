@@ -22,6 +22,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.skydoves.landscapist.coil.CoilImage
 import com.wagnod.core_ui.navigation.NavBar
 import com.wagnod.core_ui.navigation.NavBarTitle
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.profile.ui.ProfileContract.*
 import com.wagnod.profile.data.User
 import org.koin.androidx.compose.getViewModel
@@ -29,6 +30,7 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ProfileScreen(
+    navigator: Navigator,
     viewModel: ProfileViewModel = getViewModel()
 ) {
     val listener = object : Listener {

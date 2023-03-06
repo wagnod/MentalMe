@@ -1,19 +1,27 @@
 package com.wagnod.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.wagnod.core_ui.base_screen.Screen
 import com.wagnod.core_ui.navigators.*
 import com.wagnod.core_ui.navigators.main.Navigator
-import com.wagnod.navigation.data.LoginRoute
+import com.wagnod.dashboard.DashboardScreen
+import com.wagnod.entries.EntriesScreen
+import com.wagnod.friends.FriendsScreen
+import com.wagnod.login.LoginScreen
 import com.wagnod.navigation.data.NavSections
-import com.wagnod.navigation.login.LoginNavigatorImpl.Companion.rootRoute
+import com.wagnod.profile.ProfileScreen
+import com.wagnod.search.SearchScreen
+import timber.log.Timber
 
 class NavigatorImpl(
     override val dashboardNavigator: DashboardNavigator,
     override val searchNavigator: SearchNavigator,
-    override val newNavigator: NewNavigator,
+    override val entriesNavigator: EntriesNavigator,
     override val friendsNavigator: FriendsNavigator,
     override val profileNavigator: ProfileNavigator,
     override val loginNavigator: LoginNavigator
@@ -24,7 +32,7 @@ class NavigatorImpl(
     private val navigators = listOf(
         dashboardNavigator,
         searchNavigator,
-        newNavigator,
+        entriesNavigator,
         friendsNavigator,
         profileNavigator,
         loginNavigator
@@ -41,11 +49,17 @@ class NavigatorImpl(
         mNavController.navigateUp()
     }
 
+    override fun setGraphs(navGraphBuilder: NavGraphBuilder) {
+        navigators.forEach {
+            it.setGraph(navGraphBuilder, this@NavigatorImpl)
+        }
+    }
+
     @Composable
     override fun buildNavHost() {
         NavHost(
             navController = mNavController,
-            startDestination = rootRoute
+            startDestination = LoginScreen.LoginMainScreen.route
         ) {
             navigators.forEach {
                 it.setGraph(this, this@NavigatorImpl)
@@ -54,51 +68,43 @@ class NavigatorImpl(
     }
 
     override fun navigateToHome() {
-        mNavController.navigate(NavSections.DASHBOARD.route) {
-            popUpTo(NavSections.DASHBOARD.route) {
-                inclusive = true
-            }
-        }
+        DashboardScreen.DashboardMainScreen.navigate(Unit, mNavController)
     }
 
     override fun navigateToSearch() {
-        mNavController.navigate(NavSections.SEARCH.route)
+        SearchScreen.SearchMainScreen.navigate(Unit, mNavController)
     }
 
-    override fun navigateToNew() {
-        mNavController.navigate(NavSections.NEW.route)
+    override fun navigateToEntries() {
+        EntriesScreen.EntriesMainScreen.navigate(Unit, mNavController)
     }
 
     override fun navigateToFriends() {
-        mNavController.navigate(NavSections.FRIENDS.route)
+        FriendsScreen.FriendsMainScreen.navigate(Unit, mNavController)
     }
 
     override fun navigateToProfile() {
-        mNavController.navigate(NavSections.PROFILE.route)
+        ProfileScreen.ProfileMainScreen.navigate(Unit, mNavController)
     }
 
     override fun navigateToLogin() {
-        mNavController.navigate(LoginRoute.route)
-    }
-
-    override fun navigateToHomeAndClear() {
-        mNavController.navigate(NavSections.DASHBOARD.route) {
-            popUpTo(LoginRoute.route) {
-                inclusive = true
-            }
-        }
+        LoginScreen.LoginMainScreen.navigate(Unit, mNavController)
     }
 
     @Composable
-    override fun checkDestination(): Boolean {
+    override fun currentScreen(): Screen<*> {
         val entry = mNavController.currentBackStackEntryAsState()
         return when (entry.value?.destination?.route) {
-            NavSections.DASHBOARD.route,
-            NavSections.SEARCH.route,
-            NavSections.NEW.route,
-            NavSections.FRIENDS.route,
-            NavSections.PROFILE.route -> true
-            else -> false
+            ProfileScreen.ProfileMainScreen.route -> ProfileScreen.ProfileMainScreen
+            DashboardScreen.DashboardMainScreen.route -> DashboardScreen.DashboardMainScreen
+            DashboardScreen.ArticleMainScreen.route -> DashboardScreen.ArticleMainScreen
+            EntriesScreen.EntriesMainScreen.route -> EntriesScreen.EntriesMainScreen
+            FriendsScreen.FriendsMainScreen.route -> FriendsScreen.FriendsMainScreen
+            LoginScreen.LoginMainScreen.route -> LoginScreen.LoginMainScreen
+            ProfileScreen.ProfileMainScreen.route -> ProfileScreen.ProfileMainScreen
+            ProfileScreen.ProfileEditScreen.route -> ProfileScreen.ProfileEditScreen
+            SearchScreen.SearchMainScreen.route -> SearchScreen.SearchMainScreen
+            else -> LoginScreen.LoginMainScreen
         }
     }
 

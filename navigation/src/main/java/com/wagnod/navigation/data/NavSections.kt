@@ -2,20 +2,23 @@ package com.wagnod.navigation.data
 
 import androidx.annotation.StringRes
 import com.wagnod.core_ui.navigators.main.Navigator
+import com.wagnod.dashboard.DashboardScreen
+import com.wagnod.entries.EntriesScreen
+import com.wagnod.friends.FriendsScreen
 import com.wagnod.navigation.R
+import com.wagnod.profile.ProfileScreen
+import com.wagnod.search.SearchScreen
 
 enum class NavSections(
     @StringRes val title: Int,
     val icon: Int,
     val route: String,
-    val value: Int,
     val tabNavigationCallback: (Navigator) -> Unit
 ) {
     DASHBOARD(
         title = R.string.nav_home,
         icon = R.drawable.ic_home,
-        route = "dashboard",
-        value = 0,
+        route = DashboardScreen.DashboardMainScreen.route,
         tabNavigationCallback = { navigator ->
             navigator.navigateToHome()
         }
@@ -23,25 +26,22 @@ enum class NavSections(
     SEARCH(
         title = R.string.nav_explore,
         icon = R.drawable.ic_explore,
-        route = "search",
-        value = 1,
+        route = SearchScreen.SearchMainScreen.route,
         tabNavigationCallback = { navigator ->
             navigator.navigateToSearch()
         }),
     NEW(
         title = R.string.nav_entries,
         icon = R.drawable.ic_entries,
-        route = "add",
-        value = 2,
+        route = EntriesScreen.EntriesMainScreen.route,
         tabNavigationCallback = { navigator ->
-            navigator.navigateToNew()
+            navigator.navigateToEntries()
         }
     ),
     FRIENDS(
         title = R.string.nav_history,
         icon = R.drawable.ic_history,
-        route = "friends",
-        value = 3,
+        route = FriendsScreen.FriendsMainScreen.route,
         tabNavigationCallback = { navigator ->
             navigator.navigateToFriends()
         }
@@ -49,8 +49,7 @@ enum class NavSections(
     PROFILE(
         title = R.string.nav_profile,
         icon = R.drawable.ic_profile,
-        route = "profile",
-        value = 4,
+        route = ProfileScreen.ProfileMainScreen.route,
         tabNavigationCallback = { navigator ->
             navigator.navigateToProfile()
         }

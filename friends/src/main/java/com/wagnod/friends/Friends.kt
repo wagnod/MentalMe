@@ -23,7 +23,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.wagnod.core_ui.navigation.NavBar
 import com.wagnod.core_ui.navigation.NavBarTitle
+import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.theme.MentalMeTheme
+
+@Composable
+fun FriendsScreen(
+    navigator: Navigator
+) {
+    FriendsScreenContent()
+}
 
 @Composable
 fun FriendsScreenContent(

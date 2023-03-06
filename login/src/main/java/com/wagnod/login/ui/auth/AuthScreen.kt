@@ -80,7 +80,7 @@ fun AuthScreen(
     LaunchedEffect(true) {
         viewModel.effect.collect { value ->
             when (value) {
-                NavigateToHome -> navigator.navigateToHomeAndClear()
+                NavigateToHome -> navigator.navigateToHome()
                 NavigateToLoginScreen -> navigator.navigateToLogin()
             }
         }

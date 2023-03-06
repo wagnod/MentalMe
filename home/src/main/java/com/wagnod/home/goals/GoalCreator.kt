@@ -55,7 +55,7 @@ fun GoalCreator(
                     navigator.back()
                 }
                 is Effect.NavigateToGoalsCreator -> {
-                    navigator.dashboardNavigator.navigateToGoalCreator(effect.index)
+//                    navigator.dashboardNavigator.navigateToGoalCreator(effect.index)
                 }
             }
         }

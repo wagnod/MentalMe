@@ -18,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.sheet.SheetLayout
@@ -86,18 +87,18 @@ class MainActivity : ComponentActivity() {
                 bottomSheetState = bottomSheetState,
                 bottomSheetContent = bottomSheetContent,
             ) {
-//                NavHost(
-//                    navController = navController,
-//                    startDestination = "splash_screen",
-//                    builder = {
-                        navigator.buildNavHost()
-//                    }
-//                )
+                NavHost(
+                    navController = navController,
+                    startDestination = "login_main_screen",
+                    builder = {
+                        navigator.setGraphs(this)
+                    }
+                )
             }
             LaunchedEffect(true) {
                 viewModel.effect.collect { value ->
                     when (value) {
-                        Effect.NavigateToHome -> navigator.navigateToHomeAndClear()
+                        Effect.NavigateToHome -> navigator.navigateToHome()
                         Effect.NavigateToLoginScreen -> navigator.navigateToLogin()
                     }
                 }
@@ -158,7 +159,7 @@ fun ScaffoldMentalMe(
             Scaffold(
                 scaffoldState = scaffoldState,
                 bottomBar = {
-                    if (navigator.checkDestination()) {
+                    if (navigator.currentScreen().showBottomNavigation) {
                         BottomBar(navigator)
                     }
                 }

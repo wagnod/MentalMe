@@ -191,7 +191,6 @@ private fun SectionDailies(
             .fillMaxWidth()
             .padding(start = 16.dp)
     )
-    Log.d("Zhopa", "dailies = ${state.dailies}")
     Spacer(modifier = Modifier.padding(16.dp))
     LazyRow(
         modifier = Modifier.fillMaxWidth(),

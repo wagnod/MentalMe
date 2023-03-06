@@ -58,7 +58,7 @@ fun GoalsScreen(
         viewModel.effect.collect { value ->
             when (value) {
                 is Effect.NavigateToGoalsCreator -> {
-                    navigator.dashboardNavigator.navigateToGoalCreator(value.index)
+//                    navigator.dashboardNavigator.navigateToGoalCreator(value.index)
                 }
                 Effect.NavigateToGoalsScreen -> {
                     navigator.back()
