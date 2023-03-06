@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.wagnod.domain.AppDispatchers
 import com.wagnod.domain.UseCase
+import com.wagnod.domain.dashboard.usecase.SubscribeDailiesUseCase
 import com.wagnod.domain.dashboard.usecase.SubscribeTodaySelectionUseCase
 import com.wagnod.domain.execute
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class InitAppDataUseCase(
     private val subscribeTodaySelectionUseCase: SubscribeTodaySelectionUseCase,
+    private val subscribeDailiesUseCase: SubscribeDailiesUseCase,
     private val dispatchers: AppDispatchers
 ) : UseCase<Unit, Unit> {
     private val referencedListeners = mutableListOf<Pair<DatabaseReference, ValueEventListener>>()
@@ -26,7 +28,8 @@ class InitAppDataUseCase(
     private suspend fun init() = CoroutineScope(dispatchers.io).launch {
         runCatching {
             listOf(
-                async { subscribeTodaySelectionUseCase.execute().add() }
+                async { subscribeTodaySelectionUseCase.execute().add() },
+                async { subscribeDailiesUseCase.execute().add() }
             ).awaitAll()
         }
     }

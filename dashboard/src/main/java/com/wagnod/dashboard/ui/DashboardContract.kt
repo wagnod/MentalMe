@@ -1,6 +1,7 @@
 package com.wagnod.dashboard.ui
 
 import com.wagnod.core.datastore.articles.Article
+import com.wagnod.core.datastore.articles.Daily
 import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
 import com.wagnod.core_ui.sheet.data.FeedbackSheetItems
@@ -21,7 +22,8 @@ interface DashboardContract {
 
     data class State(
         val user: UserInfo = UserInfo(),
-        val articles: List<Article> = listOf()
+        val articles: List<Article> = listOf(),
+        val dailies: List<Daily> = listOf()
     ) : ViewState
 
     sealed interface Effect : ViewSideEffect {
@@ -31,5 +33,6 @@ interface DashboardContract {
     interface Listener {
         fun onProfileClick()
         fun onArticleClick(article: Article)
+        fun onDailyClick(daily: Daily)
     }
 }

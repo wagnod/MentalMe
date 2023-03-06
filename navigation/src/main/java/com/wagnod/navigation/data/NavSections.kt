@@ -21,16 +21,16 @@ enum class NavSections(
         }
     ),
     SEARCH(
-        title = R.string.nav_search,
-        icon = R.drawable.ic_search,
+        title = R.string.nav_explore,
+        icon = R.drawable.ic_explore,
         route = "search",
         value = 1,
         tabNavigationCallback = { navigator ->
             navigator.navigateToSearch()
         }),
     NEW(
-        title = R.string.nav_add,
-        icon = R.drawable.ic_add,
+        title = R.string.nav_entries,
+        icon = R.drawable.ic_entries,
         route = "add",
         value = 2,
         tabNavigationCallback = { navigator ->
@@ -38,8 +38,8 @@ enum class NavSections(
         }
     ),
     FRIENDS(
-        title = R.string.nav_friends,
-        icon = R.drawable.ic_group,
+        title = R.string.nav_history,
+        icon = R.drawable.ic_history,
         route = "friends",
         value = 3,
         tabNavigationCallback = { navigator ->

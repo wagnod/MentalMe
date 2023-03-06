@@ -23,6 +23,8 @@ import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.core_ui.sheet.SheetLayout
 import com.wagnod.core_ui.sheet.ShowBottomSheetHelper
 import com.wagnod.core_ui.theme.MentalMeTheme
+import com.wagnod.core_ui.theme.graphicsLight
+import com.wagnod.core_ui.theme.graphicsPrimary
 import com.wagnod.domain.app.InitAppDataUseCase
 import com.wagnod.domain.execute
 import com.wagnod.domain.login.usecase.CheckIsUserAuthorizedUseCase
@@ -121,14 +123,16 @@ fun BottomBar(navigator: Navigator) {
                     Icon(
                         painter = painterResource(section.icon),
                         "home navigation button",
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }, label = { Text(stringResource(section.title)) },
                 alwaysShowLabel = false,
                 selected = (currentRoute == section.route),
                 onClick = {
                     section.tabNavigationCallback(navigator)
-                }
+                },
+                selectedContentColor = MaterialTheme.colors.graphicsPrimary,
+                unselectedContentColor = MaterialTheme.colors.graphicsLight
             )
         }
     }
