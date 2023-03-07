@@ -80,7 +80,7 @@ class AuthViewModel(
         signUpUseCase.execute(authData)
     }.onSuccess {
         hideProgress()
-        if (it) setEffect { Effect.NavigateToHome }
+        if (it.id.isNotEmpty()) setEffect { Effect.NavigateToHome }
     }.onFailure {
         hideProgress()
     }

@@ -11,12 +11,16 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 @Serializable
+data class Category(val name: String = "")
+
+@Serializable
 data class Article(
     val title: String = "",
     val link: String = "",
     val image: String = "",
     val description: String = "",
-    val type: ArticleType = ArticleType.TEXT
+    val type: ArticleType = ArticleType.TEXT,
+    val category: List<Category> = listOf()
 ) {
     companion object {
         fun getSampleData() = listOf(

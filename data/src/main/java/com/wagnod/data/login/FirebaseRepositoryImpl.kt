@@ -1,21 +1,27 @@
 package com.wagnod.data.login
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseUser
 import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core.datastore.user.toMap
+import com.wagnod.core.extensions.toUser
 import com.wagnod.domain.AppDispatchers
+import com.wagnod.domain.firebase.FirebaseDatabaseReferences
 import com.wagnod.domain.login.repository.AuthData
 import com.wagnod.domain.login.repository.FirebaseRepository
 import kotlinx.coroutines.tasks.asDeferred
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class FirebaseRepositoryImpl(
     private val auth: FirebaseAuth,
-    private val database: FirebaseDatabase,
-    private val dispatchers: AppDispatchers
+    private val dispatchers: AppDispatchers,
+    private val references: FirebaseDatabaseReferences
 ) : FirebaseRepository {
+
+    override suspend fun getFirebaseUser(): FirebaseUser {
+        return auth.currentUser ?: throw IllegalStateException("User expected")
+    }
 
     override suspend fun signIn(authData: AuthData) = withContext(dispatchers.io) {
         val user = auth.signInWithEmailAndPassword(authData.email, authData.password)
@@ -23,36 +29,21 @@ class FirebaseRepositoryImpl(
             .await()
             .user
         user != null
+
     }
 
     override suspend fun signUp(authData: AuthData) = withContext(dispatchers.io) {
         val user = auth.createUserWithEmailAndPassword(authData.email, authData.password)
             .asDeferred()
             .await()
-            .user
-        val profileUpdates = userProfileChangeRequest {
-            displayName = authData.name
-        }
-        user?.let {
-            it.updateProfile(profileUpdates)
-            createDatabaseUser(authData)
-        }
-        user != null
+            .toUser()
+        createDatabaseUser(user)
     }
 
-    private suspend fun createDatabaseUser(authData: AuthData) = withContext(dispatchers.io) {
-        val user = UserInfo(
-            id = auth.currentUser?.uid ?: " ",
-            userImage = "https://i.natgeofe.com/n/3861de2a-04e6-45fd-aec8-02e7809f9d4e/02-cat-training-NationalGeographic_1484324_square.jpg",
-            name = authData.name,
-            status = "Hello, world!"
-        ).toMap()
-
-        val childUpdates = hashMapOf<String, Any>(
-            "/users/${auth.currentUser?.uid}" to user,
-        )
-
-        database.reference.updateChildren(childUpdates).isSuccessful
+    private suspend fun createDatabaseUser(user: UserInfo) = withContext(dispatchers.io) {
+        val firebaseUser = getFirebaseUser()
+        references.getUserReference(firebaseUser.uid).setValue(user.toMap()).await()
+        user
     }
 
     override suspend fun isUserAuthorised() = auth.currentUser != null
