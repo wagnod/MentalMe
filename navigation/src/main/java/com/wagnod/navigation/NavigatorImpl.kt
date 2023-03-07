@@ -1,6 +1,5 @@
 package com.wagnod.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -11,18 +10,16 @@ import com.wagnod.core_ui.navigators.*
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.dashboard.DashboardScreen
 import com.wagnod.entries.EntriesScreen
-import com.wagnod.friends.FriendsScreen
+import com.wagnod.history.HistoryScreen
 import com.wagnod.login.LoginScreen
-import com.wagnod.navigation.data.NavSections
 import com.wagnod.profile.ProfileScreen
-import com.wagnod.search.SearchScreen
-import timber.log.Timber
+import com.wagnod.explore.ExploreScreen
 
 class NavigatorImpl(
     override val dashboardNavigator: DashboardNavigator,
-    override val searchNavigator: SearchNavigator,
+    override val exploreNavigator: ExploreNavigator,
     override val entriesNavigator: EntriesNavigator,
-    override val friendsNavigator: FriendsNavigator,
+    override val historyNavigator: HistoryNavigator,
     override val profileNavigator: ProfileNavigator,
     override val loginNavigator: LoginNavigator
 ) : Navigator {
@@ -31,9 +28,9 @@ class NavigatorImpl(
 
     private val navigators = listOf(
         dashboardNavigator,
-        searchNavigator,
+        exploreNavigator,
         entriesNavigator,
-        friendsNavigator,
+        historyNavigator,
         profileNavigator,
         loginNavigator
     )
@@ -72,7 +69,7 @@ class NavigatorImpl(
     }
 
     override fun navigateToSearch() {
-        SearchScreen.SearchMainScreen.navigate(Unit, mNavController)
+        ExploreScreen.ExploreMainScreen.navigate(Unit, mNavController)
     }
 
     override fun navigateToEntries() {
@@ -80,7 +77,7 @@ class NavigatorImpl(
     }
 
     override fun navigateToFriends() {
-        FriendsScreen.FriendsMainScreen.navigate(Unit, mNavController)
+        HistoryScreen.HistoryMainScreen.navigate(Unit, mNavController)
     }
 
     override fun navigateToProfile() {
@@ -99,11 +96,11 @@ class NavigatorImpl(
             DashboardScreen.DashboardMainScreen.route -> DashboardScreen.DashboardMainScreen
             DashboardScreen.ArticleMainScreen.route -> DashboardScreen.ArticleMainScreen
             EntriesScreen.EntriesMainScreen.route -> EntriesScreen.EntriesMainScreen
-            FriendsScreen.FriendsMainScreen.route -> FriendsScreen.FriendsMainScreen
+            HistoryScreen.HistoryMainScreen.route -> HistoryScreen.HistoryMainScreen
             LoginScreen.LoginMainScreen.route -> LoginScreen.LoginMainScreen
             ProfileScreen.ProfileMainScreen.route -> ProfileScreen.ProfileMainScreen
             ProfileScreen.ProfileEditScreen.route -> ProfileScreen.ProfileEditScreen
-            SearchScreen.SearchMainScreen.route -> SearchScreen.SearchMainScreen
+            ExploreScreen.ExploreMainScreen.route -> ExploreScreen.ExploreMainScreen
             else -> LoginScreen.LoginMainScreen
         }
     }

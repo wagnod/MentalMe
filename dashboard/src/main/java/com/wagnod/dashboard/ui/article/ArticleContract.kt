@@ -16,5 +16,7 @@ interface ArticleContract {
 
     sealed interface Effect : ViewSideEffect {}
 
-    interface Listener {}
+    interface Listener {
+        fun onBack()
+    }
 }

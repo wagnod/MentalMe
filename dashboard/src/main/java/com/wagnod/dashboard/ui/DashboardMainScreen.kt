@@ -1,42 +1,34 @@
 package com.wagnod.dashboard.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil.CoilImage
 import com.wagnod.core.datastore.articles.Article
 import com.wagnod.core.datastore.articles.Daily
 import com.wagnod.core_ui.EffectObserver
+import com.wagnod.core_ui.navigation.ProfileNavBar
+import com.wagnod.core_ui.navigation.ActionButton
 import com.wagnod.core_ui.navigators.main.Navigator
-import com.wagnod.core_ui.sheet.BottomSheetHeader
-import com.wagnod.core_ui.sheet.SheetButtonItem
-import com.wagnod.core_ui.sheet.UserInfoBottomSheet
+import com.wagnod.core_ui.sheet.BottomSheetContent
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
-import com.wagnod.core_ui.sheet.data.FeedbackSheetItems
-import com.wagnod.core_ui.sheet.data.GeneralSheetItems
 import com.wagnod.core_ui.theme.*
+import com.wagnod.core_ui.R
 import com.wagnod.dashboard.ui.DashboardContract.*
 import org.koin.androidx.compose.getViewModel
-import com.wagnod.core_ui.R
 
 @Composable
 fun DashboardMainScreen(
@@ -75,7 +67,9 @@ fun DashboardMainScreen(
 
     EffectObserver(viewModel.effect) {
         when (it) {
-            is Effect.ShowFullArticle -> {}
+            is Effect.ShowFullArticle -> {
+                navigator.dashboardNavigator.navigateToArticle(it.article)
+            }
         }
     }
 
@@ -91,7 +85,11 @@ private fun DashboardScreenContent(
         .fillMaxSize()
         .background(color = MaterialTheme.colors.background)
 ) {
-    Toolbar(state, listener)
+    ProfileNavBar(
+        userImage = state.user.userImage,
+        actions = { ActionButton(R.drawable.ic_search) {} },
+        onUserClick = { listener?.onProfileClick() }
+    )
     LazyColumn() {
         item {
             SectionTodaySelection(state, listener)
@@ -99,43 +97,6 @@ private fun DashboardScreenContent(
         item {
             SectionDailies(state, listener)
         }
-    }
-}
-
-@Composable
-private fun Toolbar(
-    state: State,
-    listener: Listener?
-) = Row(
-    verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(56.dp)
-        .padding(start = 24.dp)
-) {
-    CoilImage(
-        imageModel = {
-            state.user.userImage
-        },
-        modifier = Modifier
-            .clickable {
-                listener?.onProfileClick()
-            }
-            .size(40.dp)
-            .clip(RoundedCornerShape(4.dp))
-    )
-    Spacer(modifier = Modifier.weight(1f))
-    IconButton(
-        modifier = Modifier
-            .size(40.dp)
-            .padding(end = 16.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        onClick = {}
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = ""
-        )
     }
 }
 
@@ -210,7 +171,7 @@ private fun SectionDailies(
 }
 
 @Composable
-fun SectionCard(
+private fun SectionCard(
     image: Any?,
     title: String,
     onClick: () -> Unit,
@@ -255,29 +216,6 @@ fun SectionCard(
             style = MaterialTheme.typography.headline,
             color = MaterialTheme.colors.textPrimary
         )
-    }
-}
-
-
-@Composable
-fun BottomSheetContent(
-    name: String,
-    image: String,
-    onGenClick: (GeneralSheetItems) -> Unit,
-    onFeedbackClick: (FeedbackSheetItems) -> Unit,
-): @Composable () -> Unit = {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        UserInfoBottomSheet(name, image)
-        BottomSheetHeader("General")
-        GeneralSheetItems.values().forEach {
-            SheetButtonItem(it.title, it.icon) { onGenClick.invoke(it) }
-        }
-        BottomSheetHeader("Feedback")
-        FeedbackSheetItems.values().forEach {
-            SheetButtonItem(it.title, it.icon) { onFeedbackClick.invoke(it) }
-        }
     }
 }
 

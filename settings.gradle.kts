@@ -9,10 +9,10 @@ pluginManagement {
 rootProject.name = "MentalMe"
 
 include(":app")
-include(":friends")
+include(":history")
 include(":home")
 include(":profile")
-include(":search")
+include(":explore")
 include(":entries")
 include(":navigation")
 include(":core_ui")

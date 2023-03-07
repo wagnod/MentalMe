@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil.CoilImage
 import com.wagnod.core_ui.R
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
+import com.wagnod.core_ui.sheet.data.FeedbackSheetItems
+import com.wagnod.core_ui.sheet.data.GeneralSheetItems
 import com.wagnod.core_ui.theme.*
 
 @Composable
@@ -126,4 +128,26 @@ fun BottomSheetHeader(
         style = MaterialTheme.typography.footnoteRegular,
         color = MaterialTheme.colors.textColorSecondary
     )
+}
+
+@Composable
+fun BottomSheetContent(
+    name: String,
+    image: String,
+    onGenClick: (GeneralSheetItems) -> Unit,
+    onFeedbackClick: (FeedbackSheetItems) -> Unit,
+): @Composable () -> Unit = {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        UserInfoBottomSheet(name, image)
+        BottomSheetHeader("General")
+        GeneralSheetItems.values().forEach {
+            SheetButtonItem(it.title, it.icon) { onGenClick.invoke(it) }
+        }
+        BottomSheetHeader("Feedback")
+        FeedbackSheetItems.values().forEach {
+            SheetButtonItem(it.title, it.icon) { onFeedbackClick.invoke(it) }
+        }
+    }
 }

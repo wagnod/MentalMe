@@ -4,10 +4,10 @@ import androidx.annotation.StringRes
 import com.wagnod.core_ui.navigators.main.Navigator
 import com.wagnod.dashboard.DashboardScreen
 import com.wagnod.entries.EntriesScreen
-import com.wagnod.friends.FriendsScreen
+import com.wagnod.history.HistoryScreen
 import com.wagnod.navigation.R
 import com.wagnod.profile.ProfileScreen
-import com.wagnod.search.SearchScreen
+import com.wagnod.explore.ExploreScreen
 
 enum class NavSections(
     @StringRes val title: Int,
@@ -26,7 +26,7 @@ enum class NavSections(
     SEARCH(
         title = R.string.nav_explore,
         icon = R.drawable.ic_explore,
-        route = SearchScreen.SearchMainScreen.route,
+        route = ExploreScreen.ExploreMainScreen.route,
         tabNavigationCallback = { navigator ->
             navigator.navigateToSearch()
         }),
@@ -41,7 +41,7 @@ enum class NavSections(
     FRIENDS(
         title = R.string.nav_history,
         icon = R.drawable.ic_history,
-        route = FriendsScreen.FriendsMainScreen.route,
+        route = HistoryScreen.HistoryMainScreen.route,
         tabNavigationCallback = { navigator ->
             navigator.navigateToFriends()
         }

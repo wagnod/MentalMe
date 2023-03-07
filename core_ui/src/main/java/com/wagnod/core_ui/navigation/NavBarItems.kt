@@ -4,9 +4,9 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -19,8 +19,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.skydoves.landscapist.coil.CoilImage
+import com.wagnod.core_ui.R
 import com.wagnod.core_ui.theme.*
 
 @Composable
@@ -52,4 +51,23 @@ fun BackButton(onBack: () -> Unit) {
             .clickable { onBack() }
             .padding(4.dp)
     )
+}
+
+@Composable
+fun ActionButton(
+    iconId: Int,
+    onSearch: () -> Unit
+) {
+    IconButton(
+        modifier = Modifier
+            .size(40.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        onClick = { onSearch.invoke() }
+    ) {
+        Icon(
+            painter = painterResource(id = iconId),
+            modifier = Modifier.size(24.dp),
+            contentDescription = ""
+        )
+    }
 }

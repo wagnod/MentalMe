@@ -13,6 +13,7 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable
 data class Article(
     val title: String = "",
+    val link: String = "",
     val image: String = "",
     val description: String = "",
     val type: ArticleType = ArticleType.TEXT
@@ -48,12 +49,14 @@ data class Article(
             ),
             Article(
                 title = "Self Care",
+                link = "",
                 image = "https://i0.wp.com/www.additudemag.com/wp-content/uploads/2022/04/Calming-Triggered-Emotions-Saunders_1920x1080.jpg",
                 description = "https://en.wikipedia.org/wiki/File:Contopus-virens-001.ogg",
                 type = ArticleType.AUDIO
             ),
             Article(
                 title = "Health",
+                link = "",
                 image = "https://i0.wp.com/www.additudemag.com/wp-content/uploads/2022/04/Calming-Triggered-Emotions-Saunders_1920x1080.jpg",
                 description = "Some sample text",
                 type = ArticleType.TEXT
