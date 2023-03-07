@@ -45,13 +45,5 @@ enum class NavSections(
         tabNavigationCallback = { navigator ->
             navigator.navigateToFriends()
         }
-    ),
-    PROFILE(
-        title = R.string.nav_profile,
-        icon = R.drawable.ic_profile,
-        route = ProfileScreen.ProfileMainScreen.route,
-        tabNavigationCallback = { navigator ->
-            navigator.navigateToProfile()
-        }
     )
 }
