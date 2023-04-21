@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 val exploreModule = module {
     single<ExploreNavigator> { ExploreNavigatorImpl() }
-    viewModel { ExploreViewModel(get(), get()) }
+    viewModel { ExploreViewModel(get(), get(), get()) }
 }

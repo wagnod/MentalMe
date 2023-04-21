@@ -1,5 +1,6 @@
 package com.wagnod.explore.ui
 
+import com.wagnod.core.datastore.articles.Category
 import com.wagnod.core.datastore.user.UserInfo
 import com.wagnod.core_ui.sheet.data.BottomSheetParams
 import com.wagnod.core_ui.view_model.ViewEvent
@@ -13,7 +14,8 @@ interface ExploreContract {
     }
 
     data class State(
-        val user: UserInfo = UserInfo()
+        val user: UserInfo = UserInfo(),
+        val categories: List<Category> = listOf()
     ): ViewState
 
     sealed interface Effect : ViewSideEffect {}

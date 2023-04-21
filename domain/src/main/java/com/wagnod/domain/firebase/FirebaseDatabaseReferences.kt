@@ -7,4 +7,5 @@ interface FirebaseDatabaseReferences {
     suspend fun getTodaySelectionReference(): DatabaseReference
     suspend fun getArticlesReference(): DatabaseReference
     suspend fun getDailiesReference(): DatabaseReference
+    suspend fun getCategoryReference(): DatabaseReference
 }

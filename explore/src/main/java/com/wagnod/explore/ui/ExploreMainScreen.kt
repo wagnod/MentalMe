@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.flowlayout.FlowRow
 import com.wagnod.core_ui.navigation.ProfileNavBar
 import com.wagnod.core_ui.navigation.ActionButton
 import com.wagnod.core_ui.navigators.main.Navigator
@@ -55,6 +56,11 @@ private fun ExploreScreenContent(
         onUserClick = { listener?.onProfileClick() }
     )
 }
+
+@Composable
+private fun Categories() = FlowRow(
+    modifier = Modifier.fillMaxWidth()
+) {}
 
 @Preview(showBackground = true)
 @Composable
